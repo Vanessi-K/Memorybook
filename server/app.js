@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 4000;
 const path = require("path");
+const db = require("./services/database.js");
 
 const fileUpload = require("express-fileupload");
 app.use(fileUpload({createParentPath: true}));
@@ -21,11 +22,14 @@ app.use(bodyParser.urlencoded({extended:true}));
 const cors = require("cors");
 app.use(cors());
 
-//Sewtting up the routers
-const userRouter = require("./routes/userRouter.js");
+//Setting up the routers
+const indexRouter = require("./router/indexRouter.js");
+app.use("/", indexRouter);
+
+const userRouter = require("./router/userRouter.js");
 app.use("/user", userRouter);
 
-const memorybookRouter = require("./routes/memorybookRouter.js");
+const memorybookRouter = require("./router/memorybookRouter.js");
 app.use("/memorybook", memorybookRouter);
 
 app.use(function(req, res) {

@@ -1,0 +1,73 @@
+.dark-grey {
+    color: #202020;
+}
+
+.medium-grey {
+    color: #767676;
+}
+
+.light-grey {
+    color: #EBEBEB;
+}
+
+.red {
+    color: #DD2424;
+}
+
+.light-red {
+    color: #FFCBCB;
+}
+
+.yellow {
+    color: #EAB234;
+}
+
+.light-yellow {
+    color: #F2D083;
+}
+
+.green {
+    color: #50AF38;
+}
+
+.light-green {
+    color: #A4DD95;
+}
+
+
+
+.dark-grey-bg {
+    background-color: #202020;
+}
+
+.medium-grey-bg {
+    background-color: #767676;
+}
+
+.light-grey-bg {
+    background-color: #EBEBEB;
+}
+
+.red-bg {
+    background-color: #DD2424;
+}
+
+.light-red-bg {
+    background-color: #FFCBCB;
+}
+
+.yellow-bg {
+    background-color: #EAB234;
+}
+
+.light-yellow-bg {
+    background-color: #F2D083;
+}
+
+.green-bg {
+    background-color: #50AF38;
+}
+
+.light-green-bg {
+    background-color: #A4DD95;
+}

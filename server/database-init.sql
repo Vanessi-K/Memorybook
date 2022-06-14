@@ -12,6 +12,7 @@ SET foreign_key_checks = 1;
 CREATE TABLE User(userId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                    username TINYTEXT NOT NULL,
                    email TINYTEXT NOT NULL,
+                   profilePicture MEDIUMTEXT NOT NULL,
                    password TINYTEXT NOT NULL);
 
 CREATE TABLE SaveElement(elementId INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
