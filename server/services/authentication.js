@@ -33,14 +33,28 @@ async function authenticateUser(req, res) {
         });
 }
 
+function authenticateAccess(req, res, next) {
+    let token = req.body.accessToken;
+
+    console.log(token);
+
+    if(token) {
+        jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+            if(err) res.json({code:401, message: "Could not verify"});
+            console.log(user)
+            res.json({code:200, message: user})
+        });
+    } else {
+        res.json({code:401, message: "Could not verify"});
+    }
+}
+
 function authenticateJWT(req, res, next) {
     const token = req.cookies["accessToken"];
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) return res.status(403).render("error", {error: {code: 403, message: "Unauthorised access"}});
-
-            console.log(user)
             req.user = user;
             next();
         });
@@ -51,5 +65,6 @@ function authenticateJWT(req, res, next) {
 
 module.exports = {
     authenticateUser,
-    authenticateJWT
+    authenticateJWT,
+    authenticateAccess
 }
