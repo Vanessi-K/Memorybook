@@ -5,16 +5,16 @@
           <div class="grow">
             <div class="flex flex-column mb-16">
               <label>Email</label>
-              <input type="email" v-model="user.email" name="email" placeholder="your@email.com"/>
+              <input type="email" v-model="user.email" @blur="checkEmail" name="email" placeholder="your@email.com"/>
             </div>
             <div class="flex flex-column">
               <label>Password</label>
-              <input type="password" v-model="user.password" @blur="checkPassword" name="password" placeholder="Password"/>
+              <input type="password" v-model="user.password"  name="password" placeholder="Password"/>
             </div>
           </div>
-        <Alert class="mt-24" v-if="errorMessage" :alert-text="errorMessage"></Alert>
-        <button class="btn-primary mb-24 mt-24 mr-24">Login</button>
-        <button class="mb-24 mt-24 btn-secondary">Register</button>
+        <Alert class="mt-24" v-if="errorMessageState" :alert-texts="errorMessage"></Alert>
+        <button class="btn-primary mb-24 mt-24 mr-24" @click="loginUser">Login</button>
+        <router-link to="/register"><button class="mb-24 mt-24 btn-secondary">Register</button></router-link>
       </Header>
     </div>
     <Quote class="seven columns" author="Radhika Apte" quote-text="My memories mean a lot to me, and I hold them close to my heart."></Quote>
@@ -30,34 +30,51 @@ export default {
   name: "RegisterView",
   data() {
     return {
-      errorMessage: null,
+      errorMessage: {
+        email: null,
+        password: null
+      },
       user: {
-        username: "",
         email: "",
         password: ""
-      },
-      repeatedPassword: ""
+      }
     }
   },
   computed: {
     isDisabled() {
       //check if all fields are set and there is no error
-      return !((this.errorMessage === null) && (this.user.username !== "") && (this.user.email !== "") && (this.user.password !== "") && (this.repeatedPassword !== ""));
+      return !(!(this.errorMessageState)&& (this.user.username !== "") && (this.user.email !== "") && (this.user.password !== "") && (this.repeatedPassword !== ""));
+    },
+    errorMessageState() {
+      //check if there is any error message
+      return !(!this.errorMessage.password && !this.errorMessage.email)
     }
   },
   methods: {
-    checkPassword(){
-      if(this.repeatedPassword !== this.user.password) {
-        this.errorMessage = "Please make sure that you wrote the password the same both times!"
-      } else {
-        this.errorMessage = null;
-      }
-    },
-    registerUser(){
-      this.axios.post("http://localhost:4000/register/", this.user)
-          .then(message => console.log(message.data))
+    checkEmail(){
+      this.axios.post("http://localhost:4000/user/email", {email: this.user.email})
+          .then(message => {
+            if(!message.data.email) {
+              this.errorMessage.email = "There is no account associated with this email, please choose another email or register"
+            } else {
+              this.errorMessage.email = null;
+            }
+          })
           .catch(error => {console.log(error)})
-      alert("you registered")
+    },
+    loginUser(){
+      this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
+          .then(message => {
+            console.log({email: this.user.email, password: this.user.password})
+            console.log(message.data);
+            if(!message.data.accessToken) {
+              this.errorMessage.password = "The password is incorrect!";
+            } else {
+              localStorage.setItem("accessToken", message.data.accessToken)
+              this.errorMessage.password = null;
+            }
+          })
+          .catch(error => {console.log(error)})
     }
   },
   props: {},

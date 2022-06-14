@@ -86,9 +86,15 @@ export default {
     },
     registerUser(){
       this.axios.post("http://localhost:4000/register/", this.user)
-          .then(message => console.log(message.data))
+          .then(message => this.loginUser())
           .catch(error => {console.log(error)})
-      alert("you registered");
+    },
+    loginUser(){
+      this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
+          .then(message => {
+
+          })
+          .catch(error => {console.log(error)})
     }
   },
   props: {},
