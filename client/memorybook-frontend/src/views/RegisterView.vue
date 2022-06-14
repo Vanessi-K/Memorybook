@@ -77,7 +77,7 @@ export default {
       this.axios.post("http://localhost:4000/user/email", {email: this.user.email})
           .then(message => {
             if(message.data.email) {
-              this.errorMessage.email = "There is already an account associated with this email, please choose another email or login"
+              this.errorMessage.email = "There is already an account associated with this email, please choose another email or login!"
             } else {
              this.errorMessage.email = null;
             }
@@ -92,7 +92,7 @@ export default {
     loginUser(){
       this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
           .then(message => {
-
+            this.$router.push('http://localhost:3000/me');
           })
           .catch(error => {console.log(error)})
     }

@@ -55,7 +55,7 @@ export default {
       this.axios.post("http://localhost:4000/user/email", {email: this.user.email})
           .then(message => {
             if(!message.data.email) {
-              this.errorMessage.email = "There is no account associated with this email, please choose another email or register"
+              this.errorMessage.email = "There is no account associated with this email, please choose another email or register!"
             } else {
               this.errorMessage.email = null;
             }
@@ -72,6 +72,7 @@ export default {
             } else {
               localStorage.setItem("accessToken", message.data.accessToken)
               this.errorMessage.password = null;
+              this.$router.push('http://localhost:3000/me');
             }
           })
           .catch(error => {console.log(error)})

@@ -1,5 +1,10 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+
+function logout() {
+  localStorage.clear();
+}
+
 </script>
 
 <template>
@@ -14,12 +19,12 @@ import { RouterLink, RouterView } from "vue-router";
 
   <footer class="border-top padding-border mt-64">
     <div class="mt-32">
-      <div class="flex flex-row flex-space-between-j mb-32 pr-24 pl-24">
+      <div class="flex flex-row flex-space-between-j flex-end-ac mb-32 pr-24 pl-24">
         <div class="flex flex-row ">
           <div class="mr-64">
             <p class="mb-16"><strong>Account</strong></p>
             <p class="mb-4"><RouterLink to="/" class="no-link">Settings</RouterLink></p>
-            <p class="mb-4"><RouterLink to="/" class="no-link">Logout</RouterLink></p>
+            <p class="mb-4"><RouterLink to="/" @click="logout" class="no-link">Logout</RouterLink></p>
           </div>
           <div>
             <p class="mb-16"><strong>Memorybooks</strong></p>

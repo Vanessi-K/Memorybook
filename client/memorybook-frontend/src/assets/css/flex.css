@@ -38,3 +38,8 @@
 .grow {
     flex-grow: 1;
 }
+
+.gap {
+    row-gap: 24px;
+    column-gap: 24px;
+}
