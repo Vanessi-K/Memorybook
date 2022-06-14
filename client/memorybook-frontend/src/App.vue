@@ -32,7 +32,7 @@ function logout() {
             <p class="mb-4"><RouterLink to="/" class="no-link">Select Favourites</RouterLink></p>
           </div>
         </div>
-        <p class="mb-4"><RouterLink to="/" class="no-link">Impressum</RouterLink></p>
+        <p class="mb-4"><RouterLink to="/impressum" class="no-link">Impressum</RouterLink></p>
       </div>
       <p class="border-top pt-32 pb-64 text-center">by <strong>Vanessa Köck</strong></p>
     </div>
