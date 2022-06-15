@@ -32,6 +32,9 @@ app.use("/user", userRouter);
 const memorybookRouter = require("./router/memorybookRouter.js");
 app.use("/memorybook", memorybookRouter);
 
+const imageRouter = require("./router/imageRouter.js");
+app.use("/image", imageRouter);
+
 app.use(function(req, res) {
     res.status(404).json( {code: 404, message: "Can not find that endpoint"});
 });

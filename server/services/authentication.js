@@ -10,14 +10,11 @@ async function checkPassword(password, hash,) {
 
 async function authenticateUser(req, res) {
 
+    console.log("authenticate User")
+
     await userModel.getUser(req.body.email)
         .then(async (user) => {
-            console.log(user);
             let checkedPw = await checkPassword(req.body.password, user.password)
-
-            console.log(checkedPw);
-
-            console.log(user);
 
             //Get password from the database and check it with the submitted one
             if(checkedPw) {
@@ -34,15 +31,17 @@ async function authenticateUser(req, res) {
 }
 
 function authenticateAccess(req, res, next) {
-    let token = req.body.accessToken;
+    let token = req.get("accessToken");
 
-    console.log(token);
+    console.log("authenticate access")
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) res.json({code:401, message: "Could not verify"});
-            console.log(user)
-            res.json({code:200, message: user})
+            req.body.userId = user.id;
+            console.log(req.body.userId);
+            console.log("You are authenticated");
+            next();
         });
     } else {
         res.json({code:401, message: "Could not verify"});
@@ -50,16 +49,17 @@ function authenticateAccess(req, res, next) {
 }
 
 function authenticateJWT(req, res, next) {
-    const token = req.cookies["accessToken"];
+    let token = req.get("accessToken");
+    console.log("authenticate JWT")
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
-            if(err) return res.status(403).render("error", {error: {code: 403, message: "Unauthorised access"}});
-            req.user = user;
-            next();
+            if(err) res.json({code:401, message: "Could not verify"});
+            console.log("You are authenticated")
+            res.json({code:200, message: user});
         });
     } else {
-        res.status(401).render("error", {error: {code: 401, message: "Unauthorised access"}});
+        res.json({code:401, message: "Could not verify"});
     }
 }
 

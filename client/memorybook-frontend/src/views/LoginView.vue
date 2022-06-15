@@ -13,8 +13,8 @@
             </div>
           </div>
         <Alert class="mt-24" v-if="errorMessageState" :alert-texts="errorMessage"></Alert>
-        <button class="btn-primary mb-24 mt-24 mr-24" @click="loginUser">Login</button>
-        <router-link to="/register"><button class="mb-24 mt-24 btn-secondary">Register</button></router-link>
+        <button class="btn-primary mt-24 mr-24" @click="loginUser">Login</button>
+        <router-link to="/register"><button class="mb-24 btn-secondary">Register</button></router-link>
       </Header>
     </div>
     <Quote class="seven columns" author="Radhika Apte" quote-text="My memories mean a lot to me, and I hold them close to my heart."></Quote>

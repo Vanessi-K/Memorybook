@@ -8,6 +8,7 @@ import ImpressumView from "../views/ImpressumView.vue";
 import CreateView from "../views/CreateView.vue";
 import EditView from "../views/EditView.vue";
 import ViewView from "../views/ViewView.vue";
+import UploadView from "../views/UploadView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,11 @@ const router = createRouter({
       path: "/me/view",
       name: "view",
       component: ViewView,
+    },
+    {
+      path: "/me/edit/upload",
+      name: "upload",
+      component: UploadView,
     },
   ],
 });
