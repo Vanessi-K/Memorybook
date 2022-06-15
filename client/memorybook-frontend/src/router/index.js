@@ -55,14 +55,4 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach((to, from) => {
-  //If not login or register are accessed
-  if(to.name !== 'login' && to.name !== 'register' && to.name !== 'impressum' && to.name !== 'home') {
-    return axios.post("http://localhost:4000/authenticate/", {accessToken: localStorage.getItem("accessToken")})
-        //If the authentication-Token is not valid
-        .then(message => {if(message.data.code !== 200) {return {name: "login"};}})
-        .catch(error => {console.log(error); return {name: "login"};})
-  }
-})
-
 export default router;
