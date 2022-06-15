@@ -11,7 +11,7 @@
         <Polaroid :is-favourite="true"></Polaroid>
       </div>
     </Header>
-    <Header class="mt-64" text="Memorys"  button-level="btn-primary" button-value="New Memory">
+    <Header class="mt-64" text="Memorys"  button-level="btn-primary" button-value="New Memory" @buttonAction="redirectCreate">
       <p v-if="memorysEmpty">No memories</p>
       <div v-else class="flex-row flex gap wrap">
         <Polaroid></Polaroid>
@@ -44,10 +44,13 @@ export default {
       return true;
     },
     memorysEmpty() {
-      return true;
+      return false;
     }
   },
   methods: {
+    redirectCreate() {
+      this.$router.push('/me/create');
+    }
   },
   props: {},
   components: {Polaroid, Header}

@@ -4,7 +4,7 @@
       <h2 class="mb-2">
         {{ text }}
       </h2>
-      <button :class="buttonLevel">{{buttonValue}}</button>
+      <button :class="buttonLevel" @click="buttonAction">{{buttonValue}}</button>
     </div>
 
     <div class="mb-24 mt-24 mr-24 ml-24" >
@@ -20,7 +20,12 @@ export default {
   props: {
     text: String,
     buttonValue: String,
-    buttonLevel: String,
+    buttonLevel: String
+  },
+  methods: {
+    buttonAction() {
+      this.$emit('buttonAction');
+    }
   }
 }
 </script>

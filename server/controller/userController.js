@@ -17,6 +17,7 @@ async function checkIfEmailIsUsed(req, res) {
            res.json({code:200, message: "Email is already used", email: (email !== undefined)});
         })
         .catch((error) => {
+            console.log(error)
             res.json({code:500, message: "Could not check the email: Server Error"})
         });
 }

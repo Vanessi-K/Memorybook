@@ -72,7 +72,7 @@ export default {
             } else {
               localStorage.setItem("accessToken", message.data.accessToken)
               this.errorMessage.password = null;
-              this.$router.push('http://localhost:3000/me');
+              this.$router.push('/me');
             }
           })
           .catch(error => {console.log(error)})

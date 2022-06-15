@@ -92,7 +92,7 @@ export default {
     loginUser(){
       this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
           .then(message => {
-            this.$router.push('http://localhost:3000/me');
+            this.$router.push('/me');
           })
           .catch(error => {console.log(error)})
     }

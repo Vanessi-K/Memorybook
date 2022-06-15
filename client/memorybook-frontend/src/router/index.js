@@ -5,6 +5,9 @@ import RegisterView from "../views/RegisterView.vue";
 import LoginView from "../views/LoginView.vue";
 import MeHomeView from "../views/MeHomeView.vue";
 import ImpressumView from "../views/ImpressumView.vue";
+import CreateView from "../views/CreateView.vue";
+import EditView from "../views/EditView.vue";
+import ViewView from "../views/ViewView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +36,21 @@ const router = createRouter({
       path: "/impressum",
       name: "impressum",
       component: ImpressumView,
+    },
+    {
+      path: "/me/edit",
+      name: "edit",
+      component: EditView,
+    },
+    {
+      path: "/me/create",
+      name: "create",
+      component: CreateView,
+    },
+    {
+      path: "/me/view",
+      name: "view",
+      component: ViewView,
     },
   ],
 });
