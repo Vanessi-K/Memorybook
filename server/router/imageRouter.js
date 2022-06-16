@@ -11,7 +11,16 @@ async function uploadFiles(directory, req, res) {
     try{
         if(!req.files){
             res.json({code: false, message: "No file to upload"})
+            //checck if multiple files have been uploads
         } else if(req.files.files !== {}){
+            if(!req.files.files[0]){
+                console.log("no array")
+                let file = req.files.files;
+                req.files.files = [];
+                req.files.files.push(file);
+            }
+
+            console.log("upload")
             _.forEach(_.keysIn(req.files.files), async (key) => {
                 let img = req.files.files[key];
 
@@ -23,6 +32,7 @@ async function uploadFiles(directory, req, res) {
 
                 await img.mv(filepath);
             });
+            res.json({code: 200, message: "All files uploaded"});
         }
     }catch(error) {
 
@@ -46,8 +56,6 @@ router.post("/uploads/profile", async (req, res) => {
 router.post("/temp/uploads/", async (req, res) => {
     let dir = "./public/uploads/temp/" + req.body.userId + "/";
     await uploadFiles(dir, req, res);
-
-    res.json({code: 200, message: "All files uploaded"});
 });
 
 router.post("/temp/uploads/:groupOrder", async (req, res) => {

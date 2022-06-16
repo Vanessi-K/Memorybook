@@ -10,9 +10,9 @@
                         <p class="mb-4" v-if="!isUserAuthenticated"><RouterLink to="/login" class="no-link">Login</RouterLink></p>
                     </div>
                     <div>
-                        <p class="mb-16"><strong>Memorybooks</strong></p>
-                        <p class="mb-4"><RouterLink to="/" class="no-link">Create New Memory</RouterLink></p>
-                        <p class="mb-4"><RouterLink to="/" class="no-link">Select Favourites</RouterLink></p>
+                        <p class="mb-16" v-if="isUserAuthenticated" ><strong>Memorybooks</strong></p>
+                        <p class="mb-4" v-if="isUserAuthenticated" ><RouterLink to="/" class="no-link">Create New Memory</RouterLink></p>
+                        <p class="mb-4" v-if="isUserAuthenticated"><RouterLink to="/" class="no-link">Select Favourites</RouterLink></p>
                     </div>
                 </div>
                 <p class="mb-4" style="align-self: flex-end;"><RouterLink to="/impressum" class="no-link">Impressum</RouterLink></p>
@@ -47,10 +47,8 @@ export default {
                   .get("http://localhost:4000/authenticate", {headers: {"accessToken": localStorage.getItem("accessToken")}})
                   .then((res) => {
                     if (res.data.code === 401) {
-                      console.log("no access")
                       this.isUserAuthenticated = false;
                     } else {
-                      console.log("User is logged in")
                       this.isUserAuthenticated = true;
                     }
                   })

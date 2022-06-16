@@ -39,10 +39,8 @@ export default {
                 .get("http://localhost:4000/authenticate", {headers: {"accessToken": localStorage.getItem("accessToken")}})
                 .then((res) => {
                   if (res.data.code === 401) {
-                    console.log("no access")
                     this.isUserAuthenticated = false;
                   } else {
-                    console.log("User is logged in")
                     this.isUserAuthenticated = true;
                   }
                 });
