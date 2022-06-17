@@ -4,8 +4,8 @@
       <Header text="Register">
         <div  class="flex flex-row">
           <div class="mr-32 mt-24">
-            <div class="dark-grey-bg" style="height:200px"></div>
-            <button class="mt-16 mb-8 btn-secondary">Upload Profile Image</button>
+            <img class="dark-grey-bg" style="height:200px" :src="user.profilePicture"/>
+            <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFiles"></label>
           </div>
           <div class="grow">
             <div class="flex flex-column mb-16">
@@ -50,9 +50,11 @@ export default {
       user: {
         username: "",
         email: "",
-        password: ""
+        password: "",
+        profilePicture: "http://localhost:4000/users/placeholder.png"
       },
-      repeatedPassword: ""
+      repeatedPassword: "",
+      fileUploadTarget: "http://localhost:4000/image/uploads/profile"
     }
   },
   computed: {
@@ -75,8 +77,8 @@ export default {
     },
     checkEmail(){
       this.axios.post("http://localhost:4000/user/email", {email: this.user.email})
-          .then(message => {
-            if(message.data.email) {
+          .then(res => {
+            if(res.data.email) {
               this.errorMessage.email = "There is already an account associated with this email, please choose another email or login!"
             } else {
              this.errorMessage.email = null;
@@ -86,15 +88,40 @@ export default {
     },
     registerUser(){
       this.axios.post("http://localhost:4000/register/", this.user)
-          .then(message => this.loginUser())
+          .then(res => this.loginUser())
           .catch(error => {console.log(error)})
     },
     loginUser(){
       this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
-          .then(message => {
+          .then(res => {
+            localStorage.setItem("accessToken", res.data.accessToken)
             this.$router.push('/me');
           })
           .catch(error => {console.log(error)})
+    },
+    registerFiles: function(event) {
+      this.files = event.target.files;
+      this.send();
+    },
+    send: async function() {
+      if (this.files != undefined || this.files != {}) {
+
+        let formData = new FormData();
+
+        for (const i of Object.keys(this.files)) {
+          formData.append('files', this.files[i])
+        }
+
+        this.axios.post(this.fileUploadTarget, formData, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+            .then((res) => {
+              if(res.data.code === 200) {
+                this.user.profilePicture = res.data.file;
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            })
+      }
     }
   },
   props: {},

@@ -33,8 +33,6 @@ async function authenticateUser(req, res) {
 function authenticateAccess(req, res, next) {
     let token = req.get("accessToken");
 
-    console.log("authenticate access")
-
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) res.json({code:401, message: "Could not verify"});
@@ -48,15 +46,21 @@ function authenticateAccess(req, res, next) {
     }
 }
 
-function authenticateJWT(req, res, next) {
+function verifyUserAccess(req, res, next) {
     let token = req.get("accessToken");
-    console.log("authenticate JWT")
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) res.json({code:401, message: "Could not verify"});
             console.log("You are authenticated")
-            res.json({code:200, message: user});
+            req.body.userId = user.id;
+
+            userModel.getProfileImage(req.body.userId)
+                .then(image => {
+                    console.log(image.profilePicture)
+                    res.json({code:200, message: user, image: image.profilePicture})})
+                .catch(error => {res.json({code:500, message: "Could not verify", image: null})})
+            ;
         });
     } else {
         res.json({code:401, message: "Could not verify"});
@@ -65,6 +69,6 @@ function authenticateJWT(req, res, next) {
 
 module.exports = {
     authenticateUser,
-    authenticateJWT,
+    verifyUserAccess,
     authenticateAccess
 }

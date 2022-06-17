@@ -53,8 +53,8 @@ export default {
   methods: {
     checkEmail(){
       this.axios.post("http://localhost:4000/user/email", {email: this.user.email})
-          .then(message => {
-            if(!message.data.email) {
+          .then(res => {
+            if(!res.data.email) {
               this.errorMessage.email = "There is no account associated with this email, please choose another email or register!"
             } else {
               this.errorMessage.email = null;
@@ -64,13 +64,13 @@ export default {
     },
     loginUser(){
       this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
-          .then(message => {
+          .then(res => {
             console.log({email: this.user.email, password: this.user.password})
-            console.log(message.data);
-            if(!message.data.accessToken) {
+            console.log(res.data);
+            if(!res.data.accessToken) {
               this.errorMessage.password = "The password is incorrect!";
             } else {
-              localStorage.setItem("accessToken", message.data.accessToken)
+              localStorage.setItem("accessToken", res.data.accessToken)
               this.errorMessage.password = null;
               this.$router.push('/me');
             }

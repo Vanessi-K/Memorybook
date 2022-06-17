@@ -7,7 +7,7 @@
         Memorybook
       </RouterLink>
       <RouterLink to="/" v-if="this.isUserAuthenticated">
-        <div class="small-round"></div>
+        <div class="small-round" :style="{backgroundImage: cssImageString}"/>
       </RouterLink>
     </nav>
   </header>
@@ -25,7 +25,13 @@ export default {
     return {
       accessToken: "",
       isUserAuthenticated: "",
+      userImage: "",
     };
+  },
+  computed: {
+    cssImageString() {
+      return "url(" + this.userImage + ")";
+    }
   },
     methods: {
       storageChanged() {
@@ -38,10 +44,12 @@ export default {
             this.axios
                 .get("http://localhost:4000/authenticate", {headers: {"accessToken": localStorage.getItem("accessToken")}})
                 .then((res) => {
-                  if (res.data.code === 401) {
+                  if (res.data.code !== 200) {
                     this.isUserAuthenticated = false;
                   } else {
                     this.isUserAuthenticated = true;
+                    this.userImage = res.data.image;
+                    console.log(this.userImage);
                   }
                 });
           }
@@ -56,4 +64,10 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  .small-round {
+    background-size:cover;
+    background-position: center;
+  }
+
+</style>

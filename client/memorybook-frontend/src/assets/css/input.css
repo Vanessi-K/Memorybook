@@ -44,3 +44,7 @@ label {
     line-height: 1.6;
     margin-bottom: 2px;
 }
+
+input[type="file"] {
+    display: none;
+}

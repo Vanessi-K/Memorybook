@@ -1,7 +1,7 @@
 <template>
   <main class="padding-border">
-    <input type="file" name="files" multiple @change="registerFiles">
-    <button @click="send" class="btn-primary">Upload</button>
+
+    <label class="button fileupload-button btn-primary ">Upload<input type="file" name="files" multiple @change="registerFiles"></label>
     <ImageDisplay :images="images"></ImageDisplay>
   </main>
 </template>
@@ -24,6 +24,7 @@ export default {
   methods: {
     registerFiles: function(event) {
       this.files = event.target.files;
+      this.send();
     },
     send: async function() {
       if (this.files != undefined || this.files != {}) {
@@ -37,9 +38,6 @@ export default {
         this.axios.post(this.fileUploadTarget, formData, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then((res) => {
             console.log(res.data)
-            if(res.data.code === 401) {
-              this.$router.push('/login');
-            }
             if(res.data.code === 200) {
               this.axios.get(this.fileUploadTarget, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
                   .then((res) => {

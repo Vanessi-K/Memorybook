@@ -46,7 +46,7 @@ export default {
               this.axios
                   .get("http://localhost:4000/authenticate", {headers: {"accessToken": localStorage.getItem("accessToken")}})
                   .then((res) => {
-                    if (res.data.code === 401) {
+                    if (res.data.code !== 200) {
                       this.isUserAuthenticated = false;
                     } else {
                       this.isUserAuthenticated = true;

@@ -6,66 +6,30 @@ const _ = require("lodash");
 const uuid = require("uuid");
 
 const authenticationService = require("../services/authentication.js");
+const fileupload = require("../services/fileupload.js");
 
-async function uploadFiles(directory, req, res) {
-    try{
-        if(!req.files){
-            res.json({code: false, message: "No file to upload"})
-            //checck if multiple files have been uploads
-        } else if(req.files.files !== {}){
-            if(!req.files.files[0]){
-                console.log("no array")
-                let file = req.files.files;
-                req.files.files = [];
-                req.files.files.push(file);
-            }
 
-            console.log("upload")
-            _.forEach(_.keysIn(req.files.files), async (key) => {
-                let img = req.files.files[key];
-
-                let uuidString = uuid.v4();
-                let extension = img.name.split('.').pop()
-                let filename = uuidString + "." + extension;
-
-                let filepath = directory + filename
-
-                await img.mv(filepath);
-            });
-            res.json({code: 200, message: "All files uploaded"});
-        }
-    }catch(error) {
-
-    }
-}
-
-function readFiles(readDirectory, appendPath, req, res) {
-    let savedFilesNames = fs.readdirSync(readDirectory);
-    let savedFilesPaths = [];
-    savedFilesNames.forEach(file => savedFilesPaths.push(appendPath + file));
-    return savedFilesPaths;
-}
-
-router.use(authenticationService.authenticateAccess);
+router.post("/temp/uploads/", authenticationService.authenticateAccess);
+router.post("/temp/uploads/:groupOrder/", authenticationService.authenticateAccess);
+router.get("/temp/uploads/", authenticationService.authenticateAccess);
 
 router.post("/uploads/profile", async (req, res) => {
-    let dir = "./public/uploads/users/" + req.body.userId + "/";
-    await uploadFiles(dir, req, res);
+    await fileupload.uploadUserFile(req, res);
 });
 
 router.post("/temp/uploads/", async (req, res) => {
     let dir = "./public/uploads/temp/" + req.body.userId + "/";
-    await uploadFiles(dir, req, res);
+    await fileupload.uploadFiles(dir, req, res);
 });
 
-router.post("/temp/uploads/:groupOrder", async (req, res) => {
+router.post("/temp/uploads/:groupOrder/", async (req, res) => {
     let dir = "./public/uploads/temp/" + req.body.userId + "/" + req.params.groupOrder  + "/";
-    await uploadFiles(dir, req, res);
+    await fileupload.uploadFiles(dir, req, res);
 });
 
 router.get("/temp/uploads/", async (req, res) => {
     let dir = "./public/uploads/temp/" + req.body.userId + "/";
-    let files = readFiles(dir,"http://localhost:4000/uploads/temp/"  + req.body.userId + "/" , req, res);
+    let files = fileupload.readFiles(dir,"http://localhost:4000/uploads/temp/"  + req.body.userId + "/" , req, res);
     res.json({code: 200,  message: "All images return", files:files});
 });
 

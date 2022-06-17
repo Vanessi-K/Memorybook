@@ -7,7 +7,7 @@ let insertUser = (userData) => new Promise(async (resolve, reject) => {
     let sql = "INSERT INTO User(username, email, profilePicture, password) values (" +
         "" + db.escape(userData.username) +
         "," + db.escape(userData.email) +
-        "," + db.escape("/users/placeholder.png") +
+        "," + db.escape(userData.profilePicture) +
         "," + db.escape(encryptedPassword) +
         ")";
 
@@ -40,8 +40,21 @@ let getUser = (email) => new Promise((resolve, reject) => {
     });
 });
 
+let getProfileImage = (id) => new Promise((resolve, reject) => {
+    db.query("SELECT profilePicture from User WHERE userId=?", [id], (err, user, fields) => {
+        if(err) {
+            console.log("error");
+            console.log(err);
+            reject(err);
+        } else {
+            resolve(user[0]);
+        }
+    });
+});
+
 module.exports = {
     insertUser,
     checkIfEmailIsUsed,
+    getProfileImage,
     getUser
 }

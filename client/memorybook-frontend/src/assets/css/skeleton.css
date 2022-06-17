@@ -162,6 +162,11 @@ a {
 a:hover {
   color: #0FA0CE; }
 
+label,
+legend {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600; }
 
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -222,6 +227,7 @@ input[type="button"].button-primary:focus {
 
 /* Forms
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+
 input[type="email"],
 input[type="number"],
 input[type="search"],
@@ -266,11 +272,6 @@ textarea:focus,
 select:focus {
   border: 1px solid #33C3F0;
   outline: 0; }
-label,
-legend {
-  display: block;
-  margin-bottom: .5rem;
-  font-weight: 600; }
 fieldset {
   padding: 0;
   border-width: 0; }
