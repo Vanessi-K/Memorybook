@@ -35,10 +35,15 @@ async function uploadFiles(directory, req, res) {
 }
 
 function readFiles(readDirectory, appendPath, req, res) {
-    let savedFilesNames = fs.readdirSync(readDirectory);
-    let savedFilesPaths = [];
-    savedFilesNames.forEach(file => savedFilesPaths.push(appendPath + file));
-    return savedFilesPaths;
+    if(fs.existsSync(readDirectory)){
+        let savedFilesNames = fs.readdirSync(readDirectory);
+        let savedFilesPaths = [];
+        savedFilesNames.forEach(file => savedFilesPaths.push(appendPath + file));
+        return savedFilesPaths;
+    } else {
+        return [];
+    }
+
 }
 
 async function uploadUserFile(req, res) {

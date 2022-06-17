@@ -24,15 +24,11 @@
 }
 
 .flex-center-ac {
-    align-content: center;
-}
-
-.flex-center-ai {
-    align-content: center;
+    align-items: center;
 }
 
 .flex-end-ac {
-    align-content: flex-end;
+    align-items: flex-end;
 }
 
 .grow {

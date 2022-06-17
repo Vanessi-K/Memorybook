@@ -67,7 +67,18 @@ export default {
 <style scoped>
   .small-round {
     background-size:cover;
+    box-sizing: border-box;
     background-position: center;
+    border-radius: 24px;
+    height: 48px;
+    width: 48px;
+    background-color: #202020;
   }
+
+  .small-round:hover {
+    border: 1px solid #202020;
+  }
+
+
 
 </style>

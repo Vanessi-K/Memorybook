@@ -50,18 +50,6 @@ strong {
     text-decoration: none;
 }
 
-.no-link {
-    text-decoration: none;
-    color: #202020;
-    margin-bottom: 0;
-}
-
-.no-link:hover {
-    text-decoration: none;
-    color: #202020;
-    margin-bottom: 0;
-}
-
 .text-center {
     text-align: center;
 }
@@ -70,4 +58,14 @@ strong {
     font-size: 1rem;
     color: #767676;
     line-height: 1.5;
+}
+
+a {
+    color: #202020;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #202020;
+    text-decoration: underline;
 }

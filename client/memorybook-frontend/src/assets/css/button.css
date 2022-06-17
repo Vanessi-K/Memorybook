@@ -1,15 +1,10 @@
 .fileupload-button {
-    padding: 0;
+
 }
 
-button, .fileupload-button, .button {
+button, .button {
     border-radius: 0;
     border: none;
-    -webkit-appearance: button;
-    text-transform: none;
-    overflow: visible;
-    margin: 0;
-    display:block;
 }
 
 .btn-primary, .btn-primary:focus {

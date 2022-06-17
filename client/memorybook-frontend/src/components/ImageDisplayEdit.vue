@@ -1,0 +1,49 @@
+<template>
+  <main class=" flex flex-column">
+    <div v-for="image in images" class="border-top pt-24 pb-24 pr-24 pl-24 flex flex-row flex-center-ac flex-space-between-j">
+      <img :src="image"/>
+      <p>{{image}}</p>
+      <div class="flex flex-row gap">
+        <Edit style="max-height:24px;"></Edit>
+        <Close style="max-height:24px;" class="red"></Close>
+      </div>
+
+    </div>
+  </main>
+</template>
+
+
+<script>
+
+import Edit from "./Icons/Edit.vue";
+import Close from "./Icons/Close.vue";
+export default {
+  name: "ImageDisplayEdit",
+  data() {
+    return {
+    }
+  },
+  computed: {
+  },
+  methods: {
+  },
+  props: {
+    images: Array,
+    buttonLevel: String,
+    buttonValue: String
+  },
+  components: {Edit, Close},
+
+}
+
+</script>
+
+<style scoped>
+
+img {
+  height: auto;
+  width: 100px;
+  border: 1px solid #EBEBEB;
+}
+
+</style>

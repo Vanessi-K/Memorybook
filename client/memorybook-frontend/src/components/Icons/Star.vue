@@ -24,4 +24,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+svg > path { fill: #202020}
+</style>

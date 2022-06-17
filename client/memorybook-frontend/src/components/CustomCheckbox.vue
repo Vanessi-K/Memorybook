@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Star from "./Star.vue";
+import Star from "./Icons/Star.vue";
 
 export default {
   name: "CustomCheckbox",

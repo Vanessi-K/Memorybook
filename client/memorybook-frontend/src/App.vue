@@ -25,7 +25,7 @@ export default {
 @import "@/assets/css/fonts.css";
 @import "@/assets/css/color.css";
 @import "@/assets/css/border.css";
-@import "@/assets/css/general.css";
+/*@import "@/assets/css/general.css";*/
 @import "@/assets/css/margin.css";
 @import "@/assets/css/padding.css";
 @import "@/assets/css/input.css";
