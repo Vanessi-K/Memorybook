@@ -34,7 +34,7 @@ async function uploadFiles(directory, req, res) {
     }
 }
 
-function readFiles(readDirectory, appendPath, req, res) {
+function readFilesDirectory(readDirectory, appendPath, req, res) {
     if(fs.existsSync(readDirectory)){
         let savedFilesNames = fs.readdirSync(readDirectory);
         let savedFilesPaths = [];
@@ -68,6 +68,6 @@ async function uploadUserFile(req, res) {
 
 module.exports = {
     uploadFiles,
-    readFiles,
+    readFilesDirectory,
     uploadUserFile
 }

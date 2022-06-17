@@ -17,20 +17,21 @@ router.post("/uploads/profile", async (req, res) => {
     await fileupload.uploadUserFile(req, res);
 });
 
-router.post("/temp/uploads/", async (req, res) => {
-    let dir = "./public/uploads/temp/" + req.body.userId + "/";
+router.post("/temp/uploads/:book/", async (req, res) => {
+    let dir = "./public/uploads/temp/" + req.params.book + "/";
     await fileupload.uploadFiles(dir, req, res);
 });
 
-router.post("/temp/uploads/:groupOrder/", async (req, res) => {
-    let dir = "./public/uploads/temp/" + req.body.userId + "/" + req.params.groupOrder  + "/";
+router.post("/temp/uploads/:book/:group/", async (req, res) => {
+    let dir = "./public/uploads/temp/" + req.body.userId + "/" + req.params.book + "/" + req.params.group  + "/";
     await fileupload.uploadFiles(dir, req, res);
 });
 
-router.get("/temp/uploads/", async (req, res) => {
-    let dir = "./public/uploads/temp/" + req.body.userId + "/";
-    let files = fileupload.readFiles(dir,"http://localhost:4000/uploads/temp/"  + req.body.userId + "/" , req, res);
+router.get("/temp/uploads/:book", async (req, res) => {
+    let dir = "./public/uploads/" + req.params.book + "/";
+    let files = fileupload.readFilesDirectory(dir,"http://localhost:4000/uploads/"  + req.params.book + "/" , req, res);
     res.json({code: 200,  message: "All images return", files:files});
 });
+
 
 module.exports = router;

@@ -1,5 +1,6 @@
 <template>
   <main class="padding-border">
+    <Back back-text="Back to overview" back-path="/me"></Back>
     <div class="flex flex-row">
       <div class="mr-32 flex flex-column spanWidthMobile">
         <div class="cover-image" ></div>

@@ -3,7 +3,7 @@
     <nav
       class="flex flex-row padding-border border-bottom pb-16 pt-16 flex-space-between-j"
     >
-      <RouterLink to="/" class="logo-font dark-grey no-link">
+      <RouterLink to="/me" class="logo-font dark-grey no-link">
         Memorybook
       </RouterLink>
       <RouterLink to="/" v-if="this.isUserAuthenticated">
