@@ -66,8 +66,29 @@ async function uploadUserFile(req, res) {
     }
 }
 
+async function uploadCoverFile(req, res) {
+    try{
+        let directory = "./public/uploads/" + req.params.memorybookId + "/";
+
+        if(!req.files){
+            res.json({code: 500, message: "No file to upload"})
+        } else if(req.files.files !== {}){
+            let img = req.files.files;
+            let uuidString = uuid.v4();
+            let extension = img.name.split('.').pop()
+            let filename = uuidString + "." + extension;
+            let filepath = directory + filename
+            await img.mv(filepath);
+            res.json({code: 200, message: "All files uploaded", file: "http://localhost:4000/uploads/" + req.params.memorybookId + "/"+ filename});
+        }
+    }catch(error) {
+        res.json({code: 500, message: error });
+    }
+}
+
 module.exports = {
     uploadFiles,
     readFilesDirectory,
-    uploadUserFile
+    uploadUserFile,
+    uploadCoverFile
 }

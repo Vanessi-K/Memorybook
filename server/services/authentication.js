@@ -30,6 +30,7 @@ async function authenticateUser(req, res) {
         });
 }
 
+//Authenticate the sent access token, for further requests
 function authenticateAccess(req, res, next) {
     let token = req.get("accessToken");
 
@@ -46,6 +47,7 @@ function authenticateAccess(req, res, next) {
     }
 }
 
+//Return valid verification and profile picture
 function verifyUserAccess(req, res, next) {
     let token = req.get("accessToken");
 

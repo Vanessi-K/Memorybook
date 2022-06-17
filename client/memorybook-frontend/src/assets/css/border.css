@@ -9,3 +9,7 @@ hr {
     border-top: 1px solid #202020;
     margin: 24px 0;
 }
+
+.border-light {
+    border: 1px solid #EBEBEB;
+}

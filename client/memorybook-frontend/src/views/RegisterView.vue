@@ -4,8 +4,8 @@
       <Header text="Register">
         <div  class="flex flex-row">
           <div class="mr-32 mt-24">
-            <img class="dark-grey-bg" style="height:200px" :src="user.profilePicture"/>
-            <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFiles"></label>
+            <img class="dark-grey-bg border-light" style="height:200px" :src="user.profilePicture"/>
+            <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFile"></label>
           </div>
           <div class="grow">
             <div class="flex flex-column mb-16">
@@ -99,7 +99,7 @@ export default {
           })
           .catch(error => {console.log(error)})
     },
-    registerFiles: function(event) {
+    registerFile: function(event) {
       this.files = event.target.files;
       this.send();
     },
