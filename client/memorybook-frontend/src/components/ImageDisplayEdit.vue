@@ -4,8 +4,8 @@
       <img :src="image.path"/>
       <p>{{image.path}}</p>
       <div class="flex flex-row gap">
-        <Edit style="max-height:24px;"></Edit>
-        <Close style="max-height:24px;" class="red" @click="deleteImage(image.imageId)"></Close>
+<!--        <Edit style="max-height:24px;"></Edit>-->
+        <Delete style="max-height:24px;" class="red" @click="deleteImage(image.imageId)"></Delete>
       </div>
 
     </div>
@@ -16,7 +16,7 @@
 <script>
 
 import Edit from "./Icons/Edit.vue";
-import Close from "./Icons/Close.vue";
+import Delete from "./Icons/Delete.vue";
 export default {
   name: "ImageDisplayEdit",
   data() {
@@ -37,7 +37,7 @@ export default {
     buttonLevel: String,
     buttonValue: String
   },
-  components: {Edit, Close},
+  components: {Edit, Delete},
 
 }
 

@@ -39,7 +39,7 @@ const router = createRouter({
       component: ImpressumView,
     },
     {
-      path: "/me/edit",
+      path: "/me/memorybook/edit",
       name: "edit",
       component: EditView,
       props: true
@@ -50,7 +50,7 @@ const router = createRouter({
       component: CreateView,
     },
     {
-      path: "/me/view",
+      path: "/me/memorybook",
       name: "view",
       component: ViewView,
       props: true

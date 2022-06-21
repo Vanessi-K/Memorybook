@@ -1,14 +1,16 @@
 <template>
-  <div class="polaroid-card flex flex-column" :class="{ favourite: memory.isFavourite }">
+  <RouterLink  :to="{name: 'view', params:{memorybookId: memory.memorybookId}}" to="/me/memorybook" class="polaroid-card flex flex-column" :class="{ favourite: memory.isFavourite }">
     <div class="polaroid-image" :style="{backgroundImage: cssImageString}"/>
-    <p class="small-text mt-16 mb-4">{{ startDateModifier }} <span v-if="memory.endDate">- {{ endDateModifier }}</span></p>
+    <p class="small-text mt-16 mb-4"><span v-if="memory.startDate"> {{ startDateModifier }}</span><span v-if="memory.endDate">- {{ endDateModifier }}</span></p>
     <h2 class="mb-2">{{memory.title}}</h2>
-  </div>
+  </RouterLink>
 </template>
 
 <script>
+import {RouterLink} from "vue-router";
 
 export default {
+
   name: "Polaroid",
   data() {
     return {
@@ -23,7 +25,7 @@ export default {
       return dbDate.toDateString();
     },
     endDateModifier() {
-      let dbDate = new Date(this.memory.startDate);
+      let dbDate = new Date(this.memory.endDate);
       return dbDate.toDateString();
     }
   },

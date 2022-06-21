@@ -4,11 +4,14 @@
 
 <script>
 export default {
-  name: "Close",
+  name: "Delete",
   props: {  },
 };
 </script>
 
 <style scoped>
-svg > path { fill: #DD2424}
+svg > path { fill: #FFCBCB}
+
+svg:hover > path { fill: #DD2424}
+
 </style>
