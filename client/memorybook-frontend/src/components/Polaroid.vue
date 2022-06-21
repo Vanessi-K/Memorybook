@@ -1,8 +1,8 @@
 <template>
-  <div class="polaroid-card flex flex-column" :class="{ favourite: isFavourite }">
-    <div class="medium-grey-bg" style="height:200px;"></div>
-    <p class="small-text mt-16 mb-4">01.05.2022 - 04.05.2022</p>
-    <h2 class="mb-2">Title</h2>
+  <div class="polaroid-card flex flex-column" :class="{ favourite: memory.isFavourite }">
+    <div class="polaroid-image" :style="{backgroundImage: cssImageString}"/>
+    <p class="small-text mt-16 mb-4">{{ startDateModifier }} <span v-if="memory.endDate">- {{ endDateModifier }}</span></p>
+    <h2 class="mb-2">{{memory.title}}</h2>
   </div>
 </template>
 
@@ -15,13 +15,24 @@ export default {
     }
   },
   computed: {
+    cssImageString() {
+      return "url(" + this.memory.cover + ")";
+    },
+    startDateModifier() {
+      let dbDate = new Date(this.memory.startDate);
+      return dbDate.toDateString();
+    },
+    endDateModifier() {
+      let dbDate = new Date(this.memory.startDate);
+      return dbDate.toDateString();
+    }
   },
   methods: {
   },
   props: {
-    isFavourite: Boolean
+    memory: Object
   },
-  components: {},
+  components: {}
 
 }
 </script>
@@ -34,6 +45,13 @@ export default {
   min-width: 200px;
   width: 12vw;
   flex-grow: 1;
+}
+
+.polaroid-image {
+  background-size:cover;
+  box-sizing: border-box;
+  background-position: center;
+  height: 200px;
 }
 
 .favourite {

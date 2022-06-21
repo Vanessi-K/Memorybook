@@ -2,8 +2,12 @@ const authenticationService = require("../services/authentication.js");
 const _ = require("lodash");
 const uuid = require("uuid");
 const fs = require("fs");
+const memorybookModel = require("../model/memorybookModel.js")
 
-async function uploadFiles(directory, req, res) {
+async function uploadFiles(directory, elementId, req, res) {
+    let uploadDirectory = "./public/" + directory ;
+    let saveDirectory = "http://localhost:4000/" + directory;
+
     try{
         if(!req.files){
             res.json({code: false, message: "No file to upload"})
@@ -15,7 +19,6 @@ async function uploadFiles(directory, req, res) {
                 req.files.files.push(file);
             }
 
-            console.log("upload")
             _.forEach(_.keysIn(req.files.files), async (key) => {
                 let img = req.files.files[key];
 
@@ -23,9 +26,10 @@ async function uploadFiles(directory, req, res) {
                 let extension = img.name.split('.').pop()
                 let filename = uuidString + "." + extension;
 
-                let filepath = directory + filename
+                await img.mv(uploadDirectory + filename);
 
-                await img.mv(filepath);
+                memorybookModel.insertImage({path:saveDirectory + filename, description: ""}, elementId)
+
             });
             res.json({code: 200, message: "All files uploaded"});
         }

@@ -42,6 +42,7 @@ const router = createRouter({
       path: "/me/edit",
       name: "edit",
       component: EditView,
+      props: true
     },
     {
       path: "/me/create",
@@ -52,11 +53,13 @@ const router = createRouter({
       path: "/me/view",
       name: "view",
       component: ViewView,
+      props: true
     },
     {
-      path: "/me/edit/upload",
+      path: "/me/upload",
       name: "upload",
       component: UploadView,
+      props: true
     },
   ],
 });

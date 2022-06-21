@@ -30,7 +30,8 @@ async function authenticateUser(req, res) {
         });
 }
 
-//Authenticate the sent access token, for further requests
+//Authenticate the set access token, for further requests
+//Use as Middleware
 function authenticateAccess(req, res, next) {
     let token = req.get("accessToken");
 
@@ -38,8 +39,6 @@ function authenticateAccess(req, res, next) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) res.json({code:401, message: "Could not verify"});
             req.body.userId = user.id;
-            console.log(req.body.userId);
-            console.log("You are authenticated");
             next();
         });
     } else {
@@ -54,12 +53,10 @@ function verifyUserAccess(req, res, next) {
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
             if(err) res.json({code:401, message: "Could not verify"});
-            console.log("You are authenticated")
             req.body.userId = user.id;
 
             userModel.getProfileImage(req.body.userId)
                 .then(image => {
-                    console.log(image.profilePicture)
                     res.json({code:200, message: user, image: image.profilePicture})})
                 .catch(error => {res.json({code:500, message: "Could not verify", image: null})})
             ;

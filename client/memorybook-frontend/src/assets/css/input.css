@@ -48,3 +48,7 @@ label {
 input[type="file"] {
     display: none;
 }
+
+textarea {
+    resize: none;
+}

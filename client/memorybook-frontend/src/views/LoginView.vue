@@ -65,8 +65,6 @@ export default {
     loginUser(){
       this.axios.post("http://localhost:4000/login/", {email: this.user.email, password: this.user.password})
           .then(res => {
-            console.log({email: this.user.email, password: this.user.password})
-            console.log(res.data);
             if(!res.data.accessToken) {
               this.errorMessage.password = "The password is incorrect!";
             } else {

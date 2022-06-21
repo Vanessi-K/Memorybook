@@ -17,20 +17,9 @@ router.post("/uploads/profile", async (req, res) => {
     await fileupload.uploadUserFile(req, res);
 });
 
-router.post("/temp/uploads/:book/", async (req, res) => {
-    let dir = "./public/uploads/temp/" + req.params.book + "/";
-    await fileupload.uploadFiles(dir, req, res);
-});
-
-router.post("/temp/uploads/:book/:group/", async (req, res) => {
-    let dir = "./public/uploads/temp/" + req.body.userId + "/" + req.params.book + "/" + req.params.group  + "/";
-    await fileupload.uploadFiles(dir, req, res);
-});
-
-router.get("/temp/uploads/:book", async (req, res) => {
-    let dir = "./public/uploads/" + req.params.book + "/";
-    let files = fileupload.readFilesDirectory(dir,"http://localhost:4000/uploads/"  + req.params.book + "/" , req, res);
-    res.json({code: 200,  message: "All images return", files:files});
+router.post("/uploads/:elementId/", async (req, res) => {
+    let dir = "uploads/" + req.params.elementId + "/";
+    await fileupload.uploadFiles(dir, req.params.elementId, req, res);
 });
 
 

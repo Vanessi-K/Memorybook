@@ -3,25 +3,15 @@
     <h4 class="mb-2">Hi {{user.username}}...</h4>
     <h5>Let's take a trip down Memorylane!</h5>
     <Header class="mt-64" text="Favourites"  button-level="btn-secondary" button-value="Select Favorites">
-      <p v-if="favoritesEmpty">Select favourites</p>
+      <p v-if="this.favouritesEmpty">Select favourites</p>
       <div v-else class="flex-row flex gap wrap">
-        <Polaroid :is-favourite="true"></Polaroid>
-        <Polaroid :is-favourite="true"></Polaroid>
-        <Polaroid :is-favourite="true"></Polaroid>
-        <Polaroid :is-favourite="true"></Polaroid>
+        <Polaroid v-for="memorybook in favouriteMemorybooks" :memory="memorybook"></Polaroid>
       </div>
     </Header>
     <Header class="mt-64" text="Memorys"  button-level="btn-primary" button-value="New Memory" @buttonAction="redirectCreate">
-      <p v-if="memorysEmpty">No memories</p>
+      <p v-if="this.memorysEmpty">No memories</p>
       <div v-else class="flex-row flex gap wrap">
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
-        <Polaroid></Polaroid>
+        <Polaroid v-for="memorybook in notFavouriteMemorybooks" :memory="memorybook"></Polaroid>
       </div>
 
     </Header>
@@ -36,15 +26,17 @@ export default {
   name: "MeHomeView",
   data() {
     return {
-      user: {}
+      user: {},
+      favouriteMemorybooks: [],
+      notFavouriteMemorybooks: [],
     }
   },
   computed: {
-    favoritesEmpty() {
-      return true;
+    favouritesEmpty() {
+      return this.favouriteMemorybooks.length <= 0;
     },
     memorysEmpty() {
-      return false;
+      return this.notFavouriteMemorybooks.length <= 0;
     }
   },
   methods: {
@@ -53,6 +45,19 @@ export default {
     }
   },
   props: {},
+  mounted() {
+    this.axios.get("http://localhost:4000/memorybook/favourite",{headers: {"accessToken":  localStorage.getItem("accessToken")}})
+    .then(result => {
+      this.favouriteMemorybooks = result.data.memorybooks;
+    })
+    .catch(error => {})
+
+    this.axios.get("http://localhost:4000/memorybook/notFavourite",{headers: {"accessToken":  localStorage.getItem("accessToken")}})
+        .then(result => {
+          this.notFavouriteMemorybooks = result.data.memorybooks;
+        })
+        .catch(error => {})
+  },
   components: {Polaroid, Header}
 
 }

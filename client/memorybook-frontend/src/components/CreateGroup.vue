@@ -10,7 +10,7 @@
           <textarea v-model="group.description" name="endDate" placeholder="It was..."></textarea>
         </div>
       </div>
-      <ImageDisplay button-value="Upload/Manage Images" button-level="btn-primary"></ImageDisplay>
+      <ImageDisplay button-value="Upload/Manage Images" :back-path="backPath" :back-text="backText" @saveAction="saveAction" button-level="btn-primary" :images="group.images" :elementId="group.groupId"></ImageDisplay>
     </Header>
 </template>
 
@@ -30,14 +30,18 @@ export default {
   methods: {
     buttonAction() {
       this.$emit('buttonAction');
+    },
+    saveAction() {
+      this.$emit('saveAction');
     }
   },
   props: {
-    group: Object
+    group: Object,
+    backText: String,
+    backPath: String,
   },
   components: {ImageDisplay, Header},
-
-}
+ }
 
 </script>
 

@@ -43,7 +43,7 @@ let createEmptyMemorybook = (bookId, userId) => new Promise(async (resolve, reje
     });
 });
 
-let createEmptyGroup = (groupId, bookId, userId) => new Promise(async (resolve, reject) => {
+let createEmptyGroup = (groupId, memorybookId, orderId) => new Promise(async (resolve, reject) => {
 
     let sql = "INSERT INTO Grouping(groupId, memorybookId, orderId) values (" +
         db.escape(groupId) + ", " +
@@ -60,16 +60,19 @@ let createEmptyGroup = (groupId, bookId, userId) => new Promise(async (resolve, 
 let getMemorybook = (bookId, userId) => new Promise(async (resolve, reject) => {
 
     let sql = "SELECT * from Memorybook JOIN SaveElement JOIN OwnsBook " +
-        "WHERE Memorybook.memorybookId=SaveElement.elementId AND + "+
+        "WHERE Memorybook.memorybookId=SaveElement.elementId AND "+
         "OwnsBook.memorybookId=Memorybook.memorybookId AND " +
         "OwnsBook.userId=" + userId + " AND " +
-        "Memorybook.memorybookId=" + bookId;
+        "Memorybook.memorybookId=" + bookId + " "
+        "ORDER BY Memorybook.startDate";
 
     db.query(sql, function(err, memorybook, fields) {
         if(err) {console.log(err); reject(err)}
         resolve(memorybook[0]);
     });
 });
+
+
 
 let setMemorybookCover = (groupId, bookId, userId) => new Promise(async (resolve, reject) => {
 
@@ -98,17 +101,124 @@ let getAllMemorybooks = (userId) => new Promise(async (resolve, reject) => {
     });
 });
 
-let getAllGroups = (bookId) => new Promise(async (resolve, reject) => {
+let getFavouriteMemorybooks = (userId) => new Promise(async (resolve, reject) => {
 
-    let sql = "SELECT * from Grouping JOIN SaveElement" +
-        "WHERE Grouping.groupId=SaveElement.elementId AND + "+
-        "Grouping.memorybookId=" + bookId;
+    let sql = "SELECT * from Memorybook JOIN SaveElement JOIN OwnsBook " +
+        "WHERE Memorybook.memorybookId=SaveElement.elementId AND + "+
+        "OwnsBook.memorybookId=Memorybook.memorybookId AND " +
+        "Memorybook.isFavourite=1 AND " +
+        "OwnsBook.userId=" + userId;
 
     db.query(sql, function(err, memorybook, fields) {
         if(err) {console.log(err); reject(err)}
-        resolve(memorybook[0]);
+        resolve(memorybook);
     });
 });
+
+let getNotFavouriteMemorybooks = (userId) => new Promise(async (resolve, reject) => {
+
+    let sql = "SELECT * from Memorybook JOIN SaveElement JOIN OwnsBook " +
+        "WHERE Memorybook.memorybookId=SaveElement.elementId AND + "+
+        "OwnsBook.memorybookId=Memorybook.memorybookId AND " +
+        "Memorybook.isFavourite=0 AND " +
+        "OwnsBook.userId=" + userId;
+
+    db.query(sql, function(err, memorybook, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(memorybook);
+    });
+});
+
+let getAllGroups = (bookId) => new Promise(async (resolve, reject) => {
+
+    let sql = "SELECT * from Grouping JOIN SaveElement " +
+        "WHERE Grouping.groupId=SaveElement.elementId AND "+
+        "Grouping.memorybookId=" + bookId + " "
+        "ORDER BY Grouping.orderId";
+
+    db.query(sql, function(err, group, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(group);
+    });
+});
+
+let getAllImagesForSaveElement = (elementId) => new Promise(async (resolve, reject) =>{
+    let sql = "SELECT * from Image WHERE elementId=" + elementId;
+    db.query(sql, function(err, image, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(image);
+    });
+})
+
+let insertImage = (image, elementId) => new Promise(async (resolve, reject) =>{
+    let sql = "INSERT INTO Image(path, description, elementId) values(" +
+        db.escape(image.path) + ", " +
+        db.escape(image.description) + ", " +
+        db.escape(elementId) +
+        ")";
+    db.query(sql, function(err, image, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(image);
+    });
+})
+
+let deleteImage = (imageId) => new Promise(async (resolve, reject) =>{
+    let sql = "DELETE FROM Image WHERE imageId=" + imageId;
+    db.query(sql, function(err, image, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(image);
+    });
+})
+
+let deleteGroup = (elementId) => new Promise(async (resolve, reject) =>{
+    let sql = "DELETE FROM Grouping WHERE groupId=" + elementId;
+    db.query(sql, function(err, group, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(group);
+    });
+})
+
+let deleteMemorybook = (elementId) => new Promise(async (resolve, reject) =>{
+    let sql = "DELETE FROM Memorybook WHERE memorybookId=" + elementId;
+    db.query(sql, function(err, memorybook, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(memorybook);
+    });
+})
+
+let deleteSaveElement = (elementId) => new Promise(async (resolve, reject) =>{
+    let sql = "DELETE FROM SaveElement WHERE elementId=" + elementId;
+    db.query(sql, function(err, element, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(element);
+    });
+})
+
+let updateSaveElement = (title, description, elementId) => new Promise(async (resolve, reject) => {
+    let sql = "UPDATE SaveElement SET " +
+        "title=" + db.escape(title) + ", " +
+        "description=" + db.escape(description) + " " +
+        "WHERE SaveElement.elementId=" + db.escape(elementId);
+
+    db.query(sql, function(err, element, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(element);
+    });
+})
+
+let updateMemorybook= (isFavourite, startDate, endDate, cover, memorybookId) => new Promise(async (resolve, reject) => {
+    let sql = "UPDATE Memorybook SET " +
+        "isFavourite=" + db.escape(isFavourite) + ", " +
+    "startDate=" + db.escape(startDate) +  ", " +
+    "enddate=" + db.escape(endDate) +  ", " +
+    "cover=" + db.escape(cover) +  " " +
+    "WHERE memorybookId=" + db.escape(memorybookId);
+
+    db.query(sql, function(err, element, fields) {
+        if(err) {console.log(err); reject(err)}
+        resolve(element);
+    });
+})
 
 
 module.exports = {
@@ -117,5 +227,15 @@ module.exports = {
     createEmptyGroup,
     getMemorybook,
     getAllMemorybooks,
-    getAllGroups
+    getFavouriteMemorybooks,
+    getNotFavouriteMemorybooks,
+    getAllGroups,
+    getAllImagesForSaveElement,
+    insertImage,
+    deleteImage,
+    deleteMemorybook,
+    deleteGroup,
+    deleteSaveElement,
+    updateSaveElement,
+    updateMemorybook
 }

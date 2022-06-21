@@ -49,7 +49,6 @@ export default {
                   } else {
                     this.isUserAuthenticated = true;
                     this.userImage = res.data.image;
-                    console.log(this.userImage);
                   }
                 });
           }

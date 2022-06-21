@@ -1,18 +1,18 @@
 <template>
   <main class="padding-border">
-    <Back back-text="Back to creating" back-path="/me/create"></Back>
+    <Back :back-text="this.backText" :back-path="this.backPath"></Back>
 
     <div class="pt-24 pb-24 mb-24 flex flex-column flex-center-ac flex-center-j border-dashed">
       <h3 class="mb-16">Upload</h3>
       <p class="mb-16">Select files to upload</p>
       <label class="button btn-primary fileupload-button">
         Upload
-       <input type="file" name="files" multiple @change="registerFiles"  accept="image/png, image/gif, image/jpeg, image/JPG, image/jpg">
+       <input type="file" name="files" multiple @change="registerFiles"  accept="image/png, image/PNG, image/gif, image/jpeg, image/JPG, image/JPEG image/jpg, image/jpeg">
       </label>
       <p class="small-text mt-4">Support for .jpg-images and .png-images</p>
     </div>
 
-    <ImageDisplayEdit :images="images"></ImageDisplayEdit>
+    <ImageDisplayEdit @reloadAction="loadImages" :images="images"></ImageDisplayEdit>
   </main>
 </template>
 
@@ -26,11 +26,13 @@ export default {
   data() {
     return {
       files: [],
-      fileUploadTarget: "http://localhost:4000/image/temp/uploads/",
       images: []
     }
   },
   computed: {
+    fileUploadTarget() {
+      return "http://localhost:4000/image/uploads/" + this.elementId;
+    }
   },
   methods: {
     registerFiles: function(event) {
@@ -48,16 +50,15 @@ export default {
 
         this.axios.post(this.fileUploadTarget, formData, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then((res) => {
-            console.log(res.data)
             if(res.data.code === 200) {
-              this.axios.get(this.fileUploadTarget, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+              this.axios.get("http://localhost:4000/memorybook/" + this.elementId + "/images", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
                   .then((res) => {
                     if(res.data.code === 401) {
                       this.$router.push('/login');
                     }
 
                     if(res.data.code === 200) {
-                      this.images = res.data.files;
+                      this.images = res.data.images;
                     }
                   })
                   .catch(error => {
@@ -69,24 +70,30 @@ export default {
             console.log(error);
           })
       }
+    },
+    loadImages() {
+      this.axios.get("http://localhost:4000/memorybook/" + this.elementId + "/images", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .then((res) => {
+            if(res.data.code === 401) {
+              this.$router.push('/login');
+            }
+
+            if(res.data.code === 200) {
+              this.images = res.data.images;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
     }
   },
   mounted() {
-    this.axios.get(this.fileUploadTarget, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
-        .then((res) => {
-          if(res.data.code === 401) {
-            this.$router.push('/login');
-          }
-
-          if(res.data.code === 200) {
-            this.images = res.data.files;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
+    this.loadImages();
   },
   props: {
+    elementId: String,
+    backText: String,
+    backPath: String
   },
   components: {ImageDisplayEdit, Back},
 

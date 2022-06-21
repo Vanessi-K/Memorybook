@@ -1,14 +1,16 @@
 <template>
   <main class="mt-24 pt-24 mb-24 border-top flex flex-column">
     <div class="flex-row flex mb-16 gap flex-space-between-j">
-      <img v-for="image in images" :src="image"/>
+      <img v-for="image in images" :src="image.path"/>
     </div>
-    <button :class="buttonLevel">{{buttonValue}}</button>
+    <RouterLink @click="saveAction" :to="{name: 'upload', params:{elementId, backText, backPath}}"><button :class="buttonLevel">{{buttonValue}}</button></RouterLink>
   </main>
 </template>
 
 
 <script>
+
+import {RouterLink} from "vue-router";
 
 export default {
   name: "ImageDisplay",
@@ -19,11 +21,17 @@ export default {
   computed: {
   },
   methods: {
+    saveAction() {
+      this.$emit('saveAction');
+    }
   },
   props: {
-    images: Array,
+    images: Object,
     buttonLevel: String,
-    buttonValue: String
+    buttonValue: String,
+    elementId: Number,
+    backPath: String,
+    backText: String
   },
   components: {},
 

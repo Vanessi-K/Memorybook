@@ -1,6 +1,5 @@
 <template>
   <main class="padding-border">
-    <Back back-text="Back to overview" back-path="/me"></Back>
     <div class="flex flex-row">
       <div class="mr-32 flex flex-column spanWidthMobile">
         <img class="cover-image dark-grey-bg border-light" :src="memorybook.cover"/>
@@ -10,7 +9,7 @@
         <div class="flex flex-row" style="margin-bottom: 1rem">
           <button class="btn-secondary" style="margin-bottom: 0">Share Memory</button>
           <div class="flex flex-center-ai">
-            <CustomCheckbox :selected="memorybook.isFavourite" @click="toggleFavourite" style="height: 25px;user-select: none;" class="ml-16"
+            <CustomCheckbox :selected="favouriteState" @click="toggleFavourite" style="height: 25px;user-select: none;" class="ml-16"
             ></CustomCheckbox>
           </div>
         </div>
@@ -33,14 +32,14 @@
           <textarea v-model="memorybook.description" name="description" placeholder="It was..."></textarea>
         </div>
         <div class="flex flex-row">
-          <button class="btn-primary mr-24">Save Memory</button>
-          <button class="btn-secondary">Delete Memory</button>
+          <button class="btn-primary mr-24" @click="saveMemorybook">Save Memory</button>
+          <button class="btn-secondary" @click="deleteMemorybook">Delete Memory</button>
         </div>
       </div>
     </div>
-    <ImageDisplay button-level="btn-secondary" button-value="Upload/Manage general Images"></ImageDisplay>
+    <ImageDisplay back-path="/me/create" back-text="Back to creating" @saveAction="cacheMemorybook" button-level="btn-secondary" button-value="Upload/Manage general Images" :images="memorybook.images"  :elementId="memorybook.memorybookId"></ImageDisplay>
 
-    <CreateGroup v-for="groupItem in memorybook.groups" :group="groupItem" @buttonAction="deleteImageGroup(groupItem.order)"></CreateGroup>
+    <CreateGroup v-for="groupItem in memorybook.groups" :group="groupItem" @saveAction="cacheMemorybook" @buttonAction="deleteImageGroup(groupItem.groupId)" back-path="/me/create" back-text="Back to creating"></CreateGroup>
 
     <button class="btn-secondary" style="width: 100%;" @click="newImageGroup">New Image Group</button>
   </main>
@@ -54,6 +53,7 @@ import Header from "../components/Header.vue";
 import CreateGroup from "../components/CreateGroup.vue";
 import CustomCheckbox from "../components/CustomCheckbox.vue";
 import Back from "../components/Back.vue";
+import Alert from "../components/Alert.vue";
 
 export default {
   name: "CreateView",
@@ -63,15 +63,18 @@ export default {
         memorybookId: undefined,
         title: "",
         description: "",
-        cover: "",
-        startDate: "",
-        endDate: "",
+        cover: "http://localhost:4000/uploads/placeholder.png",
+        startDate: null,
+        endDate: null,
         isFavourite: false,
+        images: [],
         groups : [
           {
+            groupId: 0,
             title: "Group 1",
             description: "",
-            order: 1
+            orderId: 1,
+            images: []
           }
         ]
       }
@@ -87,26 +90,54 @@ export default {
     validEndValue() {
       return this.validateDate(this.memorybook.endDate);
     },
+    favouriteState() {
+      return Boolean(this.memorybook.isFavourite);
+    }
   },
   methods: {
     newImageGroup() {
-      let groupOrder = this.memorybook.groups[this.memorybook.groups.length - 1].order + 1;
-      let newGroup = {
-        title: "Group " + groupOrder,
-        description: "",
-        order: groupOrder
+      let groupOrder = 1;
+      //Check if groups already exist
+      if(this.memorybook.groups.length) {
+        groupOrder = parseInt(this.memorybook.groups[this.memorybook.groups.length - 1].orderId) + 1;
       }
-      this.memorybook.groups.push(newGroup);
+
+      this.axios.post("http://localhost:4000/memorybook/create/group/", {memorybookId: this.memorybook.memorybookId, orderId: groupOrder},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .then(response => {
+            //Create empty group and save id
+            if(response.data.code === 200) {
+              let newGroup = {
+                groupId: response.data.id,
+                title: "Group " + groupOrder,
+                description: "",
+                orderId: groupOrder,
+                images: []
+              }
+              this.memorybook.groups.push(newGroup);
+            }
+          })
+          .catch(error => {})
+
+
+      // this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.memorybookId + "/group/")
+      //     .then(result => {
+      //       ths.memorybook.groups = result.data.groups;
+      //     })
+      //     .catch(error => {})
+
     },
     deleteImageGroup(id) {
-      let indexClickedGroup = this.memorybook.groups.findIndex(group => group.order === id);
+      let indexClickedGroup = this.memorybook.groups.findIndex(group => group.groupId === id);
+
+      this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.groups[indexClickedGroup] + "/group/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .catch(error => {})
+
       this.memorybook.groups.splice(indexClickedGroup, 1);
     },
     validateDate(dateString) {
       let date = new Date(dateString);
       if (Object.prototype.toString.call(date) === "[object Date]") {
         if (isNaN(date)) {
-          // d.getTime() or d.valueOf() will also work
           return false;
         }
         return true;
@@ -117,7 +148,7 @@ export default {
     toggleFavourite() {
       this.memorybook.isFavourite = !this.memorybook.isFavourite;
     },
-    registerFile: function(event) {
+    registerFile (event) {
       this.files = event.target.files;
       this.send();
     },
@@ -140,38 +171,65 @@ export default {
               console.log(error);
             })
       }
-    }
+    },
+    saveMemorybook() {
+        this.axios.post("http://localhost:4000/memorybook/full/" + this.memorybook.memorybookId + "/save/", {memorybook: this.memorybook}, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+            .then(result => {
+              localStorage.removeItem("activeCreate");
+              this.$router.push("/me");
+            })
+            .catch(error => {});
+      },
+      cacheMemorybook(){
+        this.axios.post("http://localhost:4000/memorybook/full/" + this.memorybook.memorybookId + "/save/", {memorybook: this.memorybook}, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+            .then(result => {})
+            .catch(error => {});
+      },
+      deleteMemorybook() {
+        this.axios.post("http://localhost:4000/memorybook/full/" + this.memorybook.memorybookId + "/delete/", {memorybook: this.memorybook}, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+            .then(result => {
+              localStorage.removeItem("activeCreate");
+              this.$router.push("/me");
+            })
+            .catch(error => {});
+      }
+    },
+  props: {
   },
-  props: {},
-  components: {CreateGroup, Header, ImageDisplay, CustomCheckbox, Back},
+  components: {Alert, CreateGroup, Header, ImageDisplay, CustomCheckbox, Back},
   mounted() {
-    this.axios.post("http://localhost:4000/memorybook/create", {},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
-        .then(response => {
-          if(response.data.code === 401) {
-            this.$router.push("/login");
-          }else if(response.data.code === 200 && response.data.id !== undefined) {
-            this.memorybook.memorybookId = response.data.id;
-            console.log(response.data)
-            this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.memorybookId, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
-                .then(response => {
-                  if(response.data.code === 401) {
-                    this.$router.push("/login");
-                  }else if(response.data.code === 200) {
-                    this.memorybook.title = response.data.memorybook.title
-                    this.memorybook.description = response.data.memorybook.description
-                    this.memorybook.cover = response.data.memorybook.cover
-                    this.memorybook.isFavourite = Boolean(response.data.memorybook.isFavourite)
-                    this.memorybook.startDate = response.data.memorybook.startDate
-                    this.memorybook.endDate = response.data.memorybook.endDate
-                    console.log(response.data.memorybook);
-                  }
-                })
-                .catch(error => {})
-          } else{
-            this.$router.push("/me");
-          }
-        })
-        .catch(error => {})
+
+    if(!Boolean((localStorage.getItem("activeCreate")))) {
+      //create an empty memorybook
+      this.axios.post("http://localhost:4000/memorybook/create", {},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .then(response => {
+            if(response.data.code === 401) {
+              this.$router.push("/login");
+            }else if(response.data.code === 200 && response.data.id !== undefined) {
+              this.memorybook.memorybookId = response.data.id;
+                    //Create empty group
+              this.axios.post("http://localhost:4000/memorybook/create/group", {memorybookId: this.memorybook.memorybookId, orderId: 1},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
+              .then(result => {
+                this.memorybook.groups[0].groupId = result.data.id;
+                localStorage.setItem("activeCreate", this.memorybook.memorybookId);
+
+                this.cacheMemorybook();
+              })
+
+            } else{
+              this.$router.push("/me");
+            }
+          })
+          .catch(error => {})
+    } else if(Boolean(localStorage.getItem("activeCreate"))) {
+
+      this.axios.get("http://localhost:4000/memorybook/full/" + localStorage.getItem("activeCreate"), {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .then(response => {
+            this.memorybook = response.data.memorybook;
+          })
+          .catch(error => {console.log(error)})
+
+    }
   }
 
 }

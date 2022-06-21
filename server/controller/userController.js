@@ -3,9 +3,6 @@ const utility = require("../services/utility.js");
 const path = require("path");
 
 async function insertUser(req, res) {
-    //console.log(req.files);
-
-    //req.body.image  =  await utility.handleFiles(req.files, "users");
     userModel.insertUser(req.body)
         .then((user) => res.json({code:200, message: "New user registered"}))
         .catch((error) => res.json({code:500, message: "Could not create a new user"}));

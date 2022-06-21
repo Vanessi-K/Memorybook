@@ -1,11 +1,11 @@
 <template>
   <main class=" flex flex-column">
     <div v-for="image in images" class="border-top pt-24 pb-24 pr-24 pl-24 flex flex-row flex-center-ac flex-space-between-j">
-      <img :src="image"/>
-      <p>{{image}}</p>
+      <img :src="image.path"/>
+      <p>{{image.path}}</p>
       <div class="flex flex-row gap">
         <Edit style="max-height:24px;"></Edit>
-        <Close style="max-height:24px;" class="red"></Close>
+        <Close style="max-height:24px;" class="red" @click="deleteImage(image.imageId)"></Close>
       </div>
 
     </div>
@@ -26,6 +26,11 @@ export default {
   computed: {
   },
   methods: {
+    deleteImage(imageId) {
+      this.axios.get("http://localhost:4000/memorybook/images/" + imageId +"/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+          .then(result => this.$emit('reloadAction'))
+      .catch(error => {})
+    }
   },
   props: {
     images: Array,
