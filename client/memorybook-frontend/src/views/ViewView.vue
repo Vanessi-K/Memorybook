@@ -36,6 +36,7 @@ import ViewGroup from "../components/ViewGroup.vue";
 import CustomCheckbox from "../components/CustomCheckbox.vue";
 import Back from "../components/Back.vue";
 import Alert from "../components/Alert.vue";
+import router from "../router";
 
 export default {
   name: "CreateView",
@@ -81,7 +82,12 @@ export default {
   mounted() { {
         this.axios.get("http://localhost:4000/memorybook/full/" + this.memorybookId, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
             .then(response => {
-              this.memorybook = response.data.memorybook;
+              if(response.data.code === 404) {
+                router.push("/me");
+              }
+              if(response.data.code == 200) {
+                this.memorybook = response.data.memorybook;
+              }
             })
             .catch(error => {console.log(error)})
       }

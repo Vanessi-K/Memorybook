@@ -21,6 +21,7 @@
 
 import ImageDisplayEdit from "../components/ImageDisplayEdit.vue";
 import Back from "../components/Back.vue";
+import router from "../router";
 export default {
   name: "UploadView",
   data() {

@@ -120,32 +120,38 @@ async function deleteSaveElement(req, res) {
 }
 
 async function getFullMemorybook(req, res) {
-    memorybookModel.getMemorybook(req.params.memorybookId, req.body.userId)
-        .then(memorybook => {
-            memorybookModel.getAllImagesForSaveElement(req.params.memorybookId)
-                .then(memorybookImages => {
-                    memorybookModel.getAllGroups(req.params.memorybookId)
-                        .then(groups => {
-                            if(!Array.isArray(groups)) {
-                                groups = new Array(groups);
-                            }
-                            groups.forEach((group, index, arr) => {
-                                memorybookModel.getAllImagesForSaveElement(group.groupId)
-                                    .then(images => {
-                                        group.images = images;
-                                        if(index === groups.length - 1) {
-                                            res.json({code: 200, message: "Fetched Memorybook", memorybook: {...memorybook, images: memorybookImages, groups: groups}})
-                                        }
 
-                                    })
-                                    .catch((error) => {console.log(error); res.json({code:500, message: "Could not get group images"})});
-                            });
-                        })
-                        .catch((error) => {console.log(error); res.json({code:500, message: "Could not get Groups"})});
-                })
-                .catch((error) => {console.log(error); res.json({code:500, message: "Could not get general images"})});
-        })
-        .catch((error) => {console.log(error); res.json({code:500, message: "Could not get Memorybook"})});
+    if(req.params.memorybookId === "undefined") {
+        res.json({code:404, message: "No such id"})
+    } else {
+        memorybookModel.getMemorybook(req.params.memorybookId, req.body.userId)
+            .then(memorybook => {
+                memorybookModel.getAllImagesForSaveElement(req.params.memorybookId)
+                    .then(memorybookImages => {
+                        memorybookModel.getAllGroups(req.params.memorybookId)
+                            .then(groups => {
+                                if(!Array.isArray(groups)) {
+                                    groups = new Array(groups);
+                                }
+                                groups.forEach((group, index, arr) => {
+                                    memorybookModel.getAllImagesForSaveElement(group.groupId)
+                                        .then(images => {
+                                            group.images = images;
+                                            if(index === groups.length - 1) {
+                                                res.json({code: 200, message: "Fetched Memorybook", memorybook: {...memorybook, images: memorybookImages, groups: groups}})
+                                            }
+
+                                        })
+                                        .catch((error) => {console.log(error); res.json({code:500, message: "Could not get group images"})});
+                                });
+                            })
+                            .catch((error) => {console.log(error); res.json({code:500, message: "Could not get Groups"})});
+                    })
+                    .catch((error) => {console.log(error); res.json({code:500, message: "Could not get general images"})});
+            }).catch((error) => {console.log(error); res.json({code:500, message: "Could not get Memorybook"})});
+    }
+
+
 }
 
 async function saveFullMemorybook(req, res) {

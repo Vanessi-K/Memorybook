@@ -68,7 +68,14 @@ let getMemorybook = (bookId, userId) => new Promise(async (resolve, reject) => {
 
     db.query(sql, function(err, memorybook, fields) {
         if(err) {console.log(err); reject(err)}
-        resolve(memorybook[0]);
+
+        if(Array.isArray(memorybook)) {
+            resolve(memorybook[0]);
+        } else{
+            resolve(memorybook);
+        }
+
+
     });
 });
 
