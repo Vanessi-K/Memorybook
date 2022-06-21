@@ -20,6 +20,9 @@ export default {
 </script>
 
 <style scoped>
-p {margin:0;}
+p {
+  margin: 0;
+  font-weight: bold;
+}
 
 </style>
