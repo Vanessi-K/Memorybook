@@ -60,7 +60,7 @@ const router = createRouter({
       name: "upload",
       component: UploadView,
       props: true
-    },
+    }
   ],
 });
 
