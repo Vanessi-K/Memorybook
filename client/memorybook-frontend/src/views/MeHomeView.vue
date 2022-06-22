@@ -1,15 +1,15 @@
 <template>
   <div class="padding-border">
-    <h4 class="mb-2">Hi {{user.username}}...</h4>
+    <h4 class="mb-2">Hi!</h4>
     <h5>Let's take a trip down Memorylane!</h5>
-    <Header class="mt-64" text="Favourites"  button-level="btn-secondary" button-value="Select Favorites">
-      <p v-if="this.favouritesEmpty">Select favourites</p>
+    <Header class="mt-64" text="Favourites"  button-level="btn-secondary" button-value="Select Favourites">
+      <img class="empty-placeholder" v-if="this.favouritesEmpty" src="http://localhost:4000/Placeholder_Favourites.png" alt="Select favourite Memorybooks">
       <div v-else class="flex-row flex gap wrap">
         <Polaroid v-for="memorybook in favouriteMemorybooks" :memory="memorybook"></Polaroid>
       </div>
     </Header>
     <Header class="mt-64" text="Memorys"  button-level="btn-primary" button-value="New Memory" @buttonAction="redirectCreate">
-      <p v-if="this.memorysEmpty">No memories</p>
+      <img class="empty-placeholder"  v-if="this.memorysEmpty" src="http://localhost:4000/Placeholder_New.png" alt="Create new Memorybooks">
       <div v-else class="flex-row flex gap wrap">
         <Polaroid v-for="memorybook in notFavouriteMemorybooks" :memory="memorybook"></Polaroid>
       </div>
@@ -48,13 +48,29 @@ export default {
   mounted() {
     this.axios.get("http://localhost:4000/memorybook/favourite",{headers: {"accessToken":  localStorage.getItem("accessToken")}})
     .then(result => {
-      this.favouriteMemorybooks = result.data.memorybooks;
+
+      console.log(result.data)
+      if(result.data.code === 401) {
+        this.$router.push("/login")
+      }
+
+      if(result.data.code === 200) {
+        this.favouriteMemorybooks = result.data.memorybooks;
+      }
     })
     .catch(error => {})
 
     this.axios.get("http://localhost:4000/memorybook/notFavourite",{headers: {"accessToken":  localStorage.getItem("accessToken")}})
         .then(result => {
-          this.notFavouriteMemorybooks = result.data.memorybooks;
+
+          if(result.data.code === 401) {
+            this.$router.push("/login")
+          }
+
+            if(result.data.code === 200) {
+              this.notFavouriteMemorybooks = result.data.memorybooks;
+            }
+
         })
         .catch(error => {})
   },
@@ -64,5 +80,10 @@ export default {
 </script>
 
 <style scoped>
+
+.empty-placeholder {
+  width: 100%;
+  height: auto;
+}
 
 </style>

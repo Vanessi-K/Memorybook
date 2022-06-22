@@ -2,7 +2,7 @@
   <main class=" flex flex-column">
     <div v-for="image in images" class="border-top pt-24 pb-24 pr-24 pl-24 flex flex-row flex-center-ac flex-space-between-j">
       <img :src="image.path"/>
-      <p>{{image.path}}</p>
+      <p class="mb-2">{{image.path}}</p>
       <div class="flex flex-row gap">
 <!--        <Edit style="max-height:24px;"></Edit>-->
         <Delete style="max-height:24px;" class="red" @click="deleteImage(image.imageId)"></Delete>

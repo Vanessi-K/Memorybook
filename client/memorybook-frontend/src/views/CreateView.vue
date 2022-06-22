@@ -3,15 +3,16 @@
     <div class="flex flex-row">
       <div class="mr-32 flex flex-column spanWidthMobile">
         <img class="cover-image dark-grey-bg border-light" :src="memorybook.cover"/>
-        <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFile"></label>
+        <label class="mt-16 mb-8 flex">
+          <input id="file" type="file" name="files" @change="registerFile" accept="image/png, image/PNG, image/gif, image/jpeg, image/JPG, image/JPEG image/jpg, image/jpeg">
+          <button class="button btn-primary grow"  onclick="document.getElementById('file').click();">Upload</button>
+        </label>
       </div>
       <div class="flex flex-column grow">
-        <div class="flex flex-row" style="margin-bottom: 1rem">
+        <div class="flex flex-row flex-center-ai " style="margin-bottom: 1rem">
           <button class="btn-secondary" style="margin-bottom: 0">Share Memory</button>
-          <div class="flex flex-center-ai">
-            <CustomCheckbox :selected="favouriteState" @click="toggleFavourite" style="height: 25px;user-select: none;" class="ml-16"
-            ></CustomCheckbox>
-          </div>
+          <CustomCheckbox class="ml-16" :selected="favouriteState" @click="toggleFavourite" style="height: 25px;user-select: none; align-self: center;"
+          ></CustomCheckbox>
         </div>
         <div class="flex flex-column mb-16">
           <label>Memorybook title</label>
@@ -37,7 +38,7 @@
         </div>
       </div>
     </div>
-    <ImageDisplay back-path="/me/create" back-text="Back to creating" @saveAction="cacheMemorybook" button-level="btn-secondary" button-value="Upload/Manage general Images" :images="memorybook.images"  :elementId="memorybook.memorybookId"></ImageDisplay>
+    <ImageDisplay back-path="/me/create" back-text="Back to creating" @saveAction="cacheMemorybook" button-level="btn-secondary" button-value="Upload/Manage general Images" :images="this.memorybook.images"  :elementId="this.memorybook.memorybookId"></ImageDisplay>
 
     <CreateGroup v-for="groupItem in memorybook.groups" :group="groupItem" @saveAction="cacheMemorybook" @buttonAction="deleteImageGroup(groupItem.groupId)" back-path="/me/create" back-text="Back to creating"></CreateGroup>
 
@@ -130,7 +131,7 @@ export default {
     deleteImageGroup(id) {
       let indexClickedGroup = this.memorybook.groups.findIndex(group => group.groupId === id);
 
-      this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.groups[indexClickedGroup] + "/group/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+      this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.groups[indexClickedGroup].groupId + "/group/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .catch(error => {})
 
       this.memorybook.groups.splice(indexClickedGroup, 1);
@@ -183,7 +184,10 @@ export default {
       },
       cacheMemorybook(){
         this.axios.post("http://localhost:4000/memorybook/full/" + this.memorybook.memorybookId + "/save/", {memorybook: this.memorybook}, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
-            .then(result => {})
+            .then(result => {
+              console.log("id")
+              console.log(this.memorybook.memorybookId);
+            })
             .catch(error => {});
       },
       deleteMemorybook() {
@@ -213,6 +217,9 @@ export default {
               .then(result => {
                 this.memorybook.groups[0].groupId = result.data.id;
                 localStorage.setItem("activeCreate", this.memorybook.memorybookId);
+
+                console.log("New id");
+                console.log(this.memorybook.memorybookId)
 
                 this.cacheMemorybook();
               })

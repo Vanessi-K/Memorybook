@@ -7,7 +7,6 @@ let createEmptyElement = () => new Promise(async (resolve, reject) => {
 
     db.query(sql, function(err, element, fields) {
         if(err) {console.log(err); reject(err)}
-        console.log(element.insertId);
         resolve(element.insertId);
     });
 });

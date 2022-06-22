@@ -1,6 +1,6 @@
 <template>
   <main class="flex flex-column">
-    <div class="flex-row flex mb-16 gap flex-space-between-j">
+    <div class="flex-row flex mb-16 gap">
       <img v-for="image in images" :src="image.path"/>
     </div>
   </main>
@@ -39,5 +39,6 @@ img {
   height: 300px;
   width: auto;
 }
+
 
 </style>

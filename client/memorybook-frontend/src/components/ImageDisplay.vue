@@ -1,9 +1,9 @@
 <template>
   <main class="mt-24 pt-24 mb-24 border-top flex flex-column">
-    <div class="flex-row flex mb-16 gap flex-space-between-j">
+    <div class="flex-row flex mb-16 gap">
       <img v-for="image in images" :src="image.path"/>
     </div>
-    <RouterLink @click="saveAction" :to="{name: 'upload', params:{elementId, backText, backPath}}"><button :class="buttonLevel">{{buttonValue}}</button></RouterLink>
+    <RouterLink class="flex no-textdecoration" @click="saveAction" :to="{name: 'upload', params:{elementId, backText, backPath}}"><button class="grow" :class="buttonLevel">{{buttonValue}}</button></RouterLink>
   </main>
 </template>
 

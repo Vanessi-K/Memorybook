@@ -37,9 +37,16 @@ function authenticateAccess(req, res, next) {
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
-            if(err) res.json({code:401, message: "Could not verify"});
-            req.body.userId = user.id;
-            next();
+            if(err) {res.json({code:401, message: "Could not verify"});}
+            else {
+                if(user === undefined) {
+                    res.json({code:401, message: "Could not verify"});
+                } else {
+                    console.log(user)
+                    req.body.userId = user.id;
+                    next();
+                }
+            }
         });
     } else {
         res.json({code:401, message: "Could not verify"});
@@ -52,14 +59,19 @@ function verifyUserAccess(req, res, next) {
 
     if(token) {
         jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
-            if(err) res.json({code:401, message: "Could not verify"});
-            req.body.userId = user.id;
+            if(err) {res.json({code:401, message: "Could not verify"});}
+            else {
+                if(user === undefined) {
+                    res.json({code:401, message: "Could not verify"});
+                } else {
+                    req.body.userId = user.id;
 
-            userModel.getProfileImage(req.body.userId)
-                .then(image => {
-                    res.json({code:200, message: user, image: image.profilePicture})})
-                .catch(error => {res.json({code:500, message: "Could not verify", image: null})})
-            ;
+                    userModel.getProfileImage(req.body.userId)
+                        .then(image => {
+                            res.json({code:200, message: user, image: image.profilePicture})})
+                        .catch(error => {res.json({code:500, message: "Could not verify", image: null})})
+                }
+            }
         });
     } else {
         res.json({code:401, message: "Could not verify"});

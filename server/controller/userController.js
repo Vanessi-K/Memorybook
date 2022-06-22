@@ -20,6 +20,8 @@ async function checkIfEmailIsUsed(req, res) {
 }
 
 
+
+
 module.exports = {
     insertUser,
     checkIfEmailIsUsed

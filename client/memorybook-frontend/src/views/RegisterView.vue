@@ -5,7 +5,10 @@
         <div  class="flex flex-row">
           <div class="mr-32 mt-24">
             <img class="dark-grey-bg border-light" style="height:200px" :src="user.profilePicture"/>
-            <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFile"></label>
+            <label for="file" class="flex">
+              <input id="file" type="file" name="files" @change="registerFile" accept="image/png, image/PNG, image/gif, image/jpeg, image/JPG, image/JPEG image/jpg, image/jpeg">
+              <button class="button btn-primary grow"  onclick="document.getElementById('file').click();">Upload</button>
+            </label>
           </div>
           <div class="grow">
             <div class="flex flex-column mb-16">

@@ -3,15 +3,15 @@
     <div class="flex flex-row">
       <div class="mr-32 flex flex-column spanWidthMobile">
         <img class="cover-image dark-grey-bg border-light" :src="memorybook.cover"/>
-        <label class="mt-16 mb-8 button fileupload-button btn-primary ">Upload<input type="file" name="files" @change="registerFile"></label>
+        <label class="mt-16 mb-8 flex">
+          <button class="button btn-primary grow">Upload</button>
+          <input type="file" name="files" @change="registerFile"></label>
       </div>
       <div class="flex flex-column grow">
-        <div class="flex flex-row" style="margin-bottom: 1rem">
+        <div class="flex flex-row " style="margin-bottom: 1rem">
           <button class="btn-secondary" style="margin-bottom: 0">Share Memory</button>
-          <div class="flex flex-center-ai">
-            <CustomCheckbox :selected="favouriteState" @click="toggleFavourite" style="height: 25px;user-select: none;" class="ml-16"
-            ></CustomCheckbox>
-          </div>
+          <CustomCheckbox class="ml-16" :selected="favouriteState" @click="toggleFavourite" style="height: 25px;user-select: none; align-self: center;"
+          ></CustomCheckbox>
         </div>
         <div class="flex flex-column mb-16">
           <label>Memorybook title</label>
@@ -130,7 +130,7 @@ export default {
     deleteImageGroup(id) {
       let indexClickedGroup = this.memorybook.groups.findIndex(group => group.groupId === id);
 
-      this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.groups[indexClickedGroup] + "/group/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
+      this.axios.get("http://localhost:4000/memorybook/" + this.memorybook.groups[indexClickedGroup].groupId + "/group/delete", {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .catch(error => {})
 
       this.memorybook.groups.splice(indexClickedGroup, 1);

@@ -6,7 +6,7 @@
       <div class="mr-32 flex flex-column spanWidthMobile">
         <img class="cover-image dark-grey-bg border-light" :src="memorybook.cover"/>
       </div>
-      <div class="flex flex-row grow flex-space-between-j">
+      <div class="flex flex-row grow flex-space-between-j gap">
         <div class="flex flex-column" style="align-self: flex-end">
           <h1 class="mb-8">{{memorybook.title}}</h1>
           <p class="small-text mb-2">
@@ -14,7 +14,7 @@
             <span v-if="memorybook.endDate">- {{ endDateModifier }}</span>
           </p>
         </div>
-        <RouterLink :to="{name: 'edit', params:{memorybookId: memorybook.memorybookId}}" class="button btn-secondary">Edit Memorybook</RouterLink>
+        <RouterLink :to="{name: 'edit', params:{memorybookId: memorybook.memorybookId}}"><button class="btn-secondary">Edit Memorybook</button></RouterLink>
         </div>
     </div>
 

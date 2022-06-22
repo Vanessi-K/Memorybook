@@ -21,7 +21,7 @@ async function createGroup(req, res) {
 }
 
 async function getMemorybook(req, res) {
-    memorybookModel.getMemorybook(req.params.memorybookId, req.body.userId)
+    memorybookModel.getMemorybook(req.params.elementId, req.body.userId)
         .then((result) => {
             if(result !== undefined) {res.json({code:200, message: "Return Memorybook", memorybook: result})}
             else{res.json({code:404, message: "Could not find a memorybook", memorybook: null})}
@@ -57,7 +57,7 @@ async function getNotFavouriteMemorybooks(req, res) {
 }
 
 async function getAllGroups(req, res) {
-    memorybookModel.getAllGroups(req.params.memorybookId)
+    memorybookModel.getAllGroups(req.params.elementId)
         .then((result) => {
             if(result !== undefined) {res.json({code:200, message: "Return Groups", groups: result})}
             else{res.json({code:404, message: "Could not find a group", groups: null})}
@@ -92,7 +92,7 @@ async function deleteImage(req, res) {
         .catch((error) => {console.log(error); res.json({code:500, message: "Could not delete image"})});
 }
 
-async function deleteGroup(req, res) {
+async function deleteGroup(req, res, next) {
 
     memorybookModel.deleteGroup(req.params.elementId)
         .then((result) => {
@@ -101,7 +101,7 @@ async function deleteGroup(req, res) {
         .catch((error) => {console.log(error); res.json({code:500, message: "Could not delete group"})});
 }
 
-async function deleteMemorybook(req, res) {
+async function deleteMemorybook(req, res, next) {
 
     memorybookModel.deleteMemorybook(req.params.elementId)
         .then((result) => {
@@ -121,14 +121,14 @@ async function deleteSaveElement(req, res) {
 
 async function getFullMemorybook(req, res) {
 
-    if(req.params.memorybookId === "undefined") {
+    if(req.params.elementId === "undefined") {
         res.json({code:404, message: "No such id"})
     } else {
-        memorybookModel.getMemorybook(req.params.memorybookId, req.body.userId)
+        memorybookModel.getMemorybook(req.params.elementId, req.body.userId)
             .then(memorybook => {
-                memorybookModel.getAllImagesForSaveElement(req.params.memorybookId)
+                memorybookModel.getAllImagesForSaveElement(req.params.elementId)
                     .then(memorybookImages => {
-                        memorybookModel.getAllGroups(req.params.memorybookId)
+                        memorybookModel.getAllGroups(req.params.elementId)
                             .then(groups => {
                                 if(!Array.isArray(groups)) {
                                     groups = new Array(groups);
@@ -155,6 +155,8 @@ async function getFullMemorybook(req, res) {
 }
 
 async function saveFullMemorybook(req, res) {
+    req.body.memorybook.memorybookId = req.params.elementId;
+
     memorybookModel.updateSaveElement(req.body.memorybook.title, req.body.memorybook.description, req.body.memorybook.memorybookId)
         .then(memorybookSaveElement => {
             memorybookModel.updateMemorybook(req.body.memorybook.isFavourite, req.body.memorybook.startDate, req.body.memorybook.endDate, req.body.memorybook.cover, req.body.memorybook.memorybookId )
@@ -169,6 +171,8 @@ async function saveFullMemorybook(req, res) {
 }
 
 async function deleteFullMemorybook(req, res) {
+    req.body.memorybook.memorybookId = req.params.elementId;
+
     req.body.memorybook.groups.forEach(group => {
 
         if(group.images !== undefined) {
@@ -177,18 +181,25 @@ async function deleteFullMemorybook(req, res) {
             }
 
             group.images.forEach(image => {
-                memorybookModel.deleteImage(image.imageId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete image"})});
+                if(image.imageId !== undefined) {
+                    memorybookModel.deleteImage(image.imageId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete image"})});
+                }
             })
         }
-
         memorybookModel.deleteGroup(group.groupId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete group"})});
         memorybookModel.deleteSaveElement(group.groupId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete group from SaveElement"})});
     })
 
-    memorybookModel.deleteMemorybook(req.body.memorybook.memorybookId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete Memorybook"})});
-    memorybookModel.deleteSaveElement(req.body.memorybook.memorybookId).catch((error) => {console.log(error); res.json({code:500, message: "Could not delete Memorybook from SaveElement"})});
+    memorybookModel.deleteMemorybook(req.body.memorybook.memorybookId)
+        .then(result => {
+            memorybookModel.deleteSaveElement(req.body.memorybook.memorybookId)
+                .then(result => {
+                    res.json({code: 200, message: "Memorybook fully deleted"})
+                })
+                .catch((error) => {console.log(error); res.json({code:500, message: "Could not delete Memorybook from SaveElement"})});
+        })
+        .catch((error) => {console.log(error); res.json({code:500, message: "Could not delete Memorybook"})});
 
-    res.json({code: 200, message: "Memorybook fully deleted"})
 }
 
 module.exports = {
@@ -201,7 +212,6 @@ module.exports = {
     getFavouriteMemorybooks,
     getNotFavouriteMemorybooks,
     getAllImages,
-    insertImage,
     deleteImage,
     deleteGroup,
     deleteMemorybook,

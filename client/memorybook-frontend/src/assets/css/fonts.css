@@ -50,6 +50,10 @@ strong {
     text-decoration: none;
 }
 
+.no-textdecoration:hover {
+    text-decoration: none;
+}
+
 .text-center {
     text-align: center;
 }

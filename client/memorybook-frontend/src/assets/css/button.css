@@ -5,6 +5,11 @@
 button, .button {
     border-radius: 0;
     border: none;
+    font-weight: bold;
+}
+
+.button {
+    font-size: 1.5rem;
 }
 
 .btn-primary, .btn-primary:focus {
@@ -18,13 +23,13 @@ button, .button {
     color: white;
 }
 
-.btn-secondary {
+.btn-secondary{
     background-color: #EBEBEB;
     color: #202020;
     transition: 0.3s;
 }
 
-.btn-secondary:hover:enabled {
+.btn-secondary:hover:enabled{
     background-color: #CECECE;
     color: #202020;
 }

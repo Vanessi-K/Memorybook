@@ -72,6 +72,7 @@ export default {
     height: 48px;
     width: 48px;
     background-color: #202020;
+    border: 1px solid #EBEBEB;
   }
 
   .small-round:hover {
