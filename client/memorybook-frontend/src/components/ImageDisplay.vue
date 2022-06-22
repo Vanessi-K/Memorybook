@@ -9,7 +9,6 @@
 
 
 <script>
-
 import {RouterLink} from "vue-router";
 
 export default {
@@ -33,8 +32,7 @@ export default {
     backPath: String,
     backText: String
   },
-  components: {},
-
+  components: {RouterLink},
 }
 
 </script>
