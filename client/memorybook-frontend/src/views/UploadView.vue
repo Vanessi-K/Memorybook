@@ -36,6 +36,7 @@
 <script>
 import ImageDisplayEdit from "../components/ImageDisplayEdit.vue";
 import Back from "../components/Back.vue";
+import router from "../router";
 
 export default {
   name: "UploadView",
@@ -46,12 +47,6 @@ export default {
     };
   },
   computed: {
-    fileUploadTarget() {
-      return (
-          "http://localhost:4000/image/uploads/" +
-          localStorage.getItem("uploadId")
-      );
-    },
     backPathStorage() {
       return this.backPath || localStorage.getItem("backPath");
     },
@@ -77,7 +72,7 @@ export default {
         }
 
         this.axios
-            .post(this.fileUploadTarget, formData, {
+            .post("http://localhost:4000/image/uploads/" + localStorage.getItem("uploadId"), formData, {
               headers: { accessToken: localStorage.getItem("accessToken") },
             })
             .then((res) => {
@@ -121,14 +116,14 @@ export default {
               { headers: { accessToken: localStorage.getItem("accessToken") } }
           )
           .then((res) => {
-            console.log("code");
-            console.log(res.data.code);
             if (res.data.code === 401) {
               this.$router.push("/login");
             }
 
             if (res.data.code === 200) {
               this.images = res.data.images;
+            } else {
+              router.push("/me");
             }
           })
           .catch((error) => {
@@ -137,16 +132,20 @@ export default {
     },
   },
   mounted() {
-    if (this.elementId !== undefined && this.elementId !== "") {
-      localStorage.setItem("uploadId", this.elementId);
-    }
-    this.loadImages();
-    if (this.backText !== undefined) {
-      localStorage.setItem("backText", this.backText);
-    }
-    if (this.backPath !== undefined) {
-      localStorage.setItem("backPath", this.backPath);
-    }
+    console.log(this.elementId)
+      if (this.elementId !== undefined && this.elementId !== "") {
+        localStorage.setItem("uploadId", this.elementId);
+      }
+      if (this.backText !== undefined) {
+        localStorage.setItem("backText", this.backText);
+      }
+      if (this.backPath !== undefined) {
+        localStorage.setItem("backPath", this.backPath);
+      }
+      this.loadImages();
+
+
+
   },
   props: {
     elementId: String,

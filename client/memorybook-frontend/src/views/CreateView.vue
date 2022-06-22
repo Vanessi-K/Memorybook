@@ -208,6 +208,7 @@ export default {
       //create an empty memorybook
       this.axios.post("http://localhost:4000/memorybook/create", {},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then(response => {
+            console.log(response.data.code);
             if(response.data.code === 401) {
               this.$router.push("/login");
             }else if(response.data.code === 200 && response.data.id !== undefined) {

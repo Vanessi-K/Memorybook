@@ -126,6 +126,8 @@ async function getFullMemorybook(req, res) {
     } else {
         memorybookModel.getMemorybook(req.params.elementId, req.body.userId)
             .then(memorybook => {
+                if(memorybook === undefined) res.json({code:404, message: "Could not find memorybook", memorybook: null})
+
                 memorybookModel.getAllImagesForSaveElement(req.params.elementId)
                     .then(memorybookImages => {
                         memorybookModel.getAllGroups(req.params.elementId)

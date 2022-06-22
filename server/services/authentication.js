@@ -10,8 +10,6 @@ async function checkPassword(password, hash,) {
 
 async function authenticateUser(req, res) {
 
-    console.log("authenticate User")
-
     await userModel.getUser(req.body.email)
         .then(async (user) => {
             let checkedPw = await checkPassword(req.body.password, user.password)
@@ -42,7 +40,6 @@ function authenticateAccess(req, res, next) {
                 if(user === undefined) {
                     res.json({code:401, message: "Could not verify"});
                 } else {
-                    console.log(user)
                     req.body.userId = user.id;
                     next();
                 }

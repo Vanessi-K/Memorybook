@@ -31,7 +31,6 @@ let checkIfEmailIsUsed = (checkEmail) => new Promise((resolve, reject) => {
 let getUser = (email) => new Promise((resolve, reject) => {
     db.query("SELECT userId, password from User WHERE email=?", [email], (err, user, fields) => {
         if(err) {
-            console.log("error");
             console.log(err);
             reject(err);
         } else {
@@ -43,7 +42,6 @@ let getUser = (email) => new Promise((resolve, reject) => {
 let getProfileImage = (id) => new Promise((resolve, reject) => {
     db.query("SELECT profilePicture from User WHERE userId=?", [id], (err, user, fields) => {
         if(err) {
-            console.log("error");
             console.log(err);
             reject(err);
         } else {

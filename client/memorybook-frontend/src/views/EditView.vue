@@ -208,11 +208,16 @@ export default {
 
       this.axios.get("http://localhost:4000/memorybook/full/" + localStorage.getItem("activeEdit"), {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then(response => {
-            if(response.data.code === 404) {
-              router.push("/me");
+
+            console.log(response.data.code);
+
+            if(response.data.code === 401) {
+              router.push("/login");
             }
             if(response.data.code == 200) {
               this.memorybook = response.data.memorybook;
+            } else {
+              router.push("/me");
             }
           })
           .catch(error => {console.log(error)})
