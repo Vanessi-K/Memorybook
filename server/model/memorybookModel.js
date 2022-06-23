@@ -113,7 +113,8 @@ let getFavouriteMemorybooks = (userId) => new Promise(async (resolve, reject) =>
         "WHERE Memorybook.memorybookId=SaveElement.elementId AND + "+
         "OwnsBook.memorybookId=Memorybook.memorybookId AND " +
         "Memorybook.isFavourite=1 AND " +
-        "OwnsBook.userId=" + userId;
+        "OwnsBook.userId=" + userId + " " +
+        "ORDER BY Memorybook.startdate DESC, Memorybook.creationDate DESC";
 
     db.query(sql, function(err, memorybook, fields) {
         if(err) {console.log(err); reject(err)}
@@ -127,7 +128,8 @@ let getNotFavouriteMemorybooks = (userId) => new Promise(async (resolve, reject)
         "WHERE Memorybook.memorybookId=SaveElement.elementId AND + "+
         "OwnsBook.memorybookId=Memorybook.memorybookId AND " +
         "Memorybook.isFavourite=0 AND " +
-        "OwnsBook.userId=" + userId;
+        "OwnsBook.userId=" + userId + " " +
+        "ORDER BY Memorybook.startdate DESC, Memorybook.creationDate DESC";
 
     db.query(sql, function(err, memorybook, fields) {
         if(err) {console.log(err); reject(err)}
