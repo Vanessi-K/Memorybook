@@ -185,8 +185,6 @@ export default {
       cacheMemorybook(){
         this.axios.post("http://localhost:4000/memorybook/full/" + this.memorybook.memorybookId + "/save/", {memorybook: this.memorybook}, {headers: {"accessToken":  localStorage.getItem("accessToken")}})
             .then(result => {
-              console.log("id")
-              console.log(this.memorybook.memorybookId);
             })
             .catch(error => {});
       },
@@ -208,7 +206,6 @@ export default {
       //create an empty memorybook
       this.axios.post("http://localhost:4000/memorybook/create", {},{headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then(response => {
-            console.log(response.data.code);
             if(response.data.code === 401) {
               this.$router.push("/login");
             }else if(response.data.code === 200 && response.data.id !== undefined) {
@@ -218,10 +215,6 @@ export default {
               .then(result => {
                 this.memorybook.groups[0].groupId = result.data.id;
                 localStorage.setItem("activeCreate", this.memorybook.memorybookId);
-
-                console.log("New id");
-                console.log(this.memorybook.memorybookId)
-
                 this.cacheMemorybook();
               })
 

@@ -5,14 +5,14 @@
                 <div class="flex flex-row ">
                     <div class="mr-64">
                         <p class="mb-16"><strong>Account</strong></p>
-                        <p class="mb-4" v-if="isUserAuthenticated"><RouterLink to="/" >Settings</RouterLink></p>
+                        <p class="mb-4" v-if="isUserAuthenticated"><a >Settings</a></p>
                         <p class="mb-4" v-if="isUserAuthenticated"><RouterLink to="/" @click="logout" >Logout</RouterLink></p>
                         <p class="mb-4" v-if="!isUserAuthenticated"><RouterLink to="/login" >Login</RouterLink></p>
                     </div>
                     <div>
                         <p class="mb-16" v-if="isUserAuthenticated" ><strong>Memorybooks</strong></p>
-                        <p class="mb-4" v-if="isUserAuthenticated" ><RouterLink to="/" >Create New Memory</RouterLink></p>
-                        <p class="mb-4" v-if="isUserAuthenticated"><RouterLink to="/" >Select Favourites</RouterLink></p>
+                        <p class="mb-4" v-if="isUserAuthenticated" ><RouterLink to="/me/create" >Create New Memory</RouterLink></p>
+                      <p class="mb-4" v-if="isUserAuthenticated"><a>Select Favourites</a></p>
                     </div>
                 </div>
                 <p class="mb-4"><RouterLink to="/impressum">Impressum</RouterLink></p>

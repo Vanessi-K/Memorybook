@@ -56,13 +56,10 @@ export default {
   },
   methods: {
     registerFiles: function (event) {
-      console.log("register");
       this.files = event.target.files;
       this.send();
     },
     send: async function () {
-      console.log("send");
-      console.log(this.files);
 
       if (this.files != undefined || this.files != {}) {
         let formData = new FormData();
@@ -132,7 +129,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.elementId)
       if (this.elementId !== undefined && this.elementId !== "") {
         localStorage.setItem("uploadId", this.elementId);
       }

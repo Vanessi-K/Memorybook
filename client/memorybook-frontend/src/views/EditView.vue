@@ -4,8 +4,9 @@
       <div class="mr-32 flex flex-column spanWidthMobile">
         <img class="cover-image dark-grey-bg border-light" :src="memorybook.cover"/>
         <label class="mt-16 mb-8 flex">
-          <button class="button btn-primary grow">Upload</button>
-          <input type="file" name="files" @change="registerFile"></label>
+          <input id="file" type="file" name="files" @change="registerFile" accept="image/png, image/PNG, image/gif, image/jpeg, image/JPG, image/JPEG image/jpg, image/jpeg">
+          <button class="button btn-primary grow"  onclick="document.getElementById('file').click();">Upload</button>
+        </label>
       </div>
       <div class="flex flex-column grow">
         <div class="flex flex-row " style="margin-bottom: 1rem">
@@ -208,8 +209,6 @@ export default {
 
       this.axios.get("http://localhost:4000/memorybook/full/" + localStorage.getItem("activeEdit"), {headers: {"accessToken":  localStorage.getItem("accessToken")}})
           .then(response => {
-
-            console.log(response.data.code);
 
             if(response.data.code === 401) {
               router.push("/login");

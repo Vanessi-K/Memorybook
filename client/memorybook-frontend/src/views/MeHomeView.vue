@@ -49,7 +49,6 @@ export default {
     this.axios.get("http://localhost:4000/memorybook/favourite",{headers: {"accessToken":  localStorage.getItem("accessToken")}})
     .then(result => {
 
-      console.log(result.data)
       if(result.data.code === 401) {
         this.$router.push("/login")
       }
