@@ -5,9 +5,17 @@
 Memorybook, is a way to manage your photos in an online photobook. A Memorybook can be created and edited. A Memorybook can consist of different groups.
 To each Memorybook and group, images can be uploaded and a descriptioin may be written.
 
-## Starting the project
+--- 
 
-Two things need to be started the vue-Frontend and the express-Backend.
+The project was created in the course of the _Creative Code Lab_ of the study program at the UAS St. Pölten, in the second semester (SS2022). The _Creative Code Lab_ is a two week long duration in which a project needs to be tackeled from start to finish. 
+
+## Starting the project
+Two things need to be started the vue-Frontend and the express-Backend. But before that a database needs to be set up.
+
+### Database
+The databse can be created with the setup file in ```service/database-init.sql```.
+After that the credentials for the database connection need to be adjusted in ```server/secrets.js``` and ```server/services/database.js```.
+
 
 ### VUE3-Frontend
 ```
@@ -58,4 +66,8 @@ Since this is a first draft not every element is working. Elements that are not 
 
 - The "Select favourites"-button on the /me-page
 - The "Share Memory"-button on the /me/create and /me/edit-page
- 
+
+# Contact
+**Vanessa Köck**\
+💻 www.vanessakoeck.dev \
+📧 cc211026@fhstp.ac.at | me@vanessakoeck.dev
