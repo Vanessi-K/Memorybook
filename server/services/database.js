@@ -2,11 +2,11 @@ const mysql = require("mysql");
 const secrets = require("../secret.js");
 
 const config = mysql.createConnection({
-    host: "atp.fhstp.ac.at",
+    host: "", //TODO: add database host
     port: 8007,
     user: secrets.dbUser,
     password: secrets.dbPassword,
-    database: "cc211026"
+    database: "" //TODO: add database name
 });
 
 config.connect((err) => {
